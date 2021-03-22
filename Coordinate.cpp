@@ -62,6 +62,9 @@ std::vector<Coordinate> Coordinate::getConsecutiveCoordinates(Direction directio
             }
             assert(coordinates.size() == length);
             return coordinates;
+        case UNKNOWN:
+            coordinates.push_back(*this);
+            return coordinates;
     }
     return coordinates;
 }
@@ -94,9 +97,10 @@ void Coordinate::_setColumnRowFromName(std::string name) {
 }
 
 std::function<bool(std::string)> Coordinate::isCoordinate = [](std::string input) {
-    return input.size() == 2 && isalpha(input[0]) && isdigit(input[1]) // Eg. C4
-        || input.size() == 3
-            && ((isalpha(input[0]) && isdigit(input[1]) && isdigit(input[2])) // Eg. K13
-                || (isalpha(input[0] && isalpha(input[1]) && isdigit(input[2])))) // Eg. AA5
-        || input.size() == 4 && isalpha(input[0]) && isalpha(input[1]); // Eg. AD41
+    return (input.size() == 2 && isalpha(input[0]) && isdigit(input[1])) // Eg. C4
+
+        || (input.size() == 3 && ((isalpha(input[0]) && isdigit(input[1]) && isdigit(input[2])) // Eg. K13
+            || (isalpha(input[0] && isalpha(input[1]) && isdigit(input[2]))))) // Eg. AA5
+
+        || (input.size() == 4 && isalpha(input[0]) && isalpha(input[1])); // Eg. AD41
 };

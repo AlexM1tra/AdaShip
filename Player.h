@@ -21,7 +21,7 @@ public:
     Player(Player const&) = delete;
 protected:
     Player(std::vector<Boat> ships);
-    std::vector<Boat::BoatPosition> getPossibleShipPlacements(Boat* boat, Coordinate startingPoint);
+    std::vector<BoatPosition> getPossibleShipPlacements(Boat* boat, Coordinate startingPoint);
 };
 
 #endif //ADASHIPPROJECT_PLAYER_H

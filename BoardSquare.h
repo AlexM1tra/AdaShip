@@ -22,7 +22,7 @@ public:
     }
     static BoardSquare* BOAT() {
         if (!_boat)
-            _boat = new BoardSquare(std::string("[") + "■"/*(char)254u*/ + "]");
+            _boat = new BoardSquare(std::string("[") + "■" + "]");
         return _boat;
     }
     static BoardSquare* HIT() {

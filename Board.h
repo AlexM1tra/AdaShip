@@ -26,7 +26,7 @@ namespace std {
 
 class Board {
 public:
-    static enum TurnResult {
+    enum TurnResult {
         MISS = 0,
         HIT = 1,
         HIT_AND_SUNK = 2,
@@ -35,11 +35,11 @@ public:
     Board(int, int, std::vector<Boat>);
     std::string getBoardForOwnerAsString();
     std::string getBoardForOpponentAsString();
-    std::string getBoardWithPlacementOptions(std::vector<Boat::BoatPosition>);
+    std::string getBoardWithPlacementOptions(std::vector<BoatPosition>);
     BoardSquare* getStatusOfSquare(Coordinate);
-    void addBoat(Boat*, Boat::BoatPosition);
+    void addBoat(Boat*, BoatPosition);
     TurnResult attackSquare(Coordinate&);
-    SettingsIO::BoardDimensions getBoardDimensions();
+    BoardDimensions getBoardDimensions();
     Boat* getBoatAtCoordinate(Coordinate*);
     std::vector<Boat> boats;
     std::vector<Boat*> unsunkShips;

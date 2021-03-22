@@ -9,7 +9,7 @@
 
 class AiPlayer : public Player {
 public:
-    AiPlayer(std::vector<Boat> ships, SettingsIO::BoardDimensions dimensions);
+    AiPlayer(std::vector<Boat> ships, BoardDimensions dimensions);
     void addAllShips() override;
     void showTurnUI(std::string) override {};
     Coordinate* move() override;

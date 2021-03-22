@@ -53,7 +53,7 @@ std::string Board::getBoardForOpponentAsString() {
     return returnString;
 }
 
-std::string Board::getBoardWithPlacementOptions(std::vector<Boat::BoatPosition> options) {
+std::string Board::getBoardWithPlacementOptions(std::vector<BoatPosition> options) {
     std::vector<std::vector<std::string>> boardCopy(this->height, std::vector<std::string>(this->width, ""));
     for (int row = 0; row < this->boardMatrix.size(); row++) {
         for (int col = 0; col < this->boardMatrix[row].size(); col++)
@@ -88,7 +88,7 @@ BoardSquare* Board::getStatusOfSquare(Coordinate square) {
     return this->boardMatrix[square.Row() - 1][square.Column() - 1];
 }
 
-void Board::addBoat(Boat* boat, Boat::BoatPosition position) {
+void Board::addBoat(Boat* boat, BoatPosition position) {
     this->unsunkShips.push_back(boat);
     this->fillBoatSquares(position.getCoordinates(), boat);
 }
@@ -132,12 +132,12 @@ Board::TurnResult Board::attackSquare(Coordinate& square) {
         }
         return TurnResult::ALREADY_ATTACKED;
     }
-    else if (chosenSquare == BoardSquare::HIT() || chosenSquare == BoardSquare::MISS())
+    else // chosenSquare is either HIT() or MISS()
         return TurnResult::ALREADY_ATTACKED;
 }
 
-SettingsIO::BoardDimensions Board::getBoardDimensions() {
-    return SettingsIO::BoardDimensions(this->width, this->height);
+BoardDimensions Board::getBoardDimensions() {
+    return BoardDimensions(this->width, this->height);
 }
 
 Boat* Board::getBoatAtCoordinate(Coordinate* c) {

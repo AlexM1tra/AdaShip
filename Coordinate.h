@@ -19,7 +19,7 @@ public:
     int Row() const;
     std::string Name();
     static std::string getColumnFromNumber(int colNumber);
-    static enum Direction {
+    enum Direction {
         UNKNOWN = 0,
         UP = 1,
         DOWN = 2,

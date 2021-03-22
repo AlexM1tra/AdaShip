@@ -8,7 +8,7 @@
 #include "HumanPlayer.h"
 #include "Common.h"
 
-HumanPlayer::HumanPlayer(std::vector<Boat> ships, SettingsIO::BoardDimensions dimensions) : Player(ships) {
+HumanPlayer::HumanPlayer(std::vector<Boat> ships, BoardDimensions dimensions) : Player(ships) {
     this->playerBoard = Board(dimensions.width, dimensions.height, ships);
     this->addAllShips();
 }
@@ -21,7 +21,7 @@ void HumanPlayer::addAllShips() {
 
 void HumanPlayer::addShip(Boat* boat) {
     std::cout << "\n" << this->playerBoard.getBoardForOwnerAsString() << "\n\n";
-    SettingsIO::BoardDimensions dimensions = this->playerBoard.getBoardDimensions();
+    BoardDimensions dimensions = this->playerBoard.getBoardDimensions();
     std::string anchor = Common::validatedInput(
             "Enter coordinate: ",
             [&dimensions](std::string input) {
@@ -29,7 +29,7 @@ void HumanPlayer::addShip(Boat* boat) {
                     && Coordinate(input).Row() <= dimensions.height
                     && Coordinate(input).Column() <= dimensions.width;
             });
-    std::vector<Boat::BoatPosition> options = this->getPossibleShipPlacements(boat, Coordinate(anchor));
+    std::vector<BoatPosition> options = this->getPossibleShipPlacements(boat, Coordinate(anchor));
     std::cout << "\n" << this->playerBoard.getBoardWithPlacementOptions(options) << "\n";
     std::string chosenOption = Common::validatedInput(
             "Choose one of the placement options shown above (or C to choose again): ",
@@ -54,7 +54,7 @@ void HumanPlayer::showTurnUI(std::string opponentBoard) {
 }
 
 Coordinate* HumanPlayer::move() {
-    SettingsIO::BoardDimensions dimensions = this->playerBoard.getBoardDimensions();
+    BoardDimensions dimensions = this->playerBoard.getBoardDimensions();
     std::string chosenCoordinate = Common::validatedInput(
             "Enter coordinate: ",
             [&dimensions](std::string input) {
@@ -66,7 +66,7 @@ Coordinate* HumanPlayer::move() {
 }
 
 void HumanPlayer::processTurnResult(Board::TurnResult result, Coordinate *chosenSquare) {
-    SettingsIO::BoardDimensions dim = this->playerBoard.getBoardDimensions();
+    BoardDimensions dim = this->playerBoard.getBoardDimensions();
     switch (result) {
         case Board::TurnResult::MISS:
             std::cout << Common::clearScreen << Common::centerFully(Common::miss) << std::endl;

@@ -9,13 +9,14 @@
 
 #include "Boat.h"
 
+struct BoardDimensions {
+    int width;
+    int height;
+    BoardDimensions(int width, int height) : width(width), height(height) {}
+};
+
 class SettingsIO {
 public:
-    static struct BoardDimensions {
-        int width;
-        int height;
-        BoardDimensions(int width, int height) : width(width), height(height) {}
-    };
 
     static std::pair<BoardDimensions, std::vector<Boat>> readSettings() {
         std::vector<std::string> lines;

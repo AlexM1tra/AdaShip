@@ -12,7 +12,7 @@
 Game::Game(int numberOfPlayers) {
     this->numberOfPlayers = numberOfPlayers;
     srand(time(NULL));
-    std::pair<SettingsIO::BoardDimensions, std::vector<Boat>> settings = SettingsIO::readSettings();
+    std::pair<BoardDimensions, std::vector<Boat>> settings = SettingsIO::readSettings();
     availableShips = settings.second;
     isPlayer1Turn = true;
     if (numberOfPlayers == 0) {

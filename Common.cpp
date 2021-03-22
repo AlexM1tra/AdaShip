@@ -57,10 +57,10 @@ const std::string Common::you_lose = "\n"
 std::string Common::validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage) {
     std::cout << prompt;
     std::string input = "";
-    //getline(std::cin, input);
+    getline(std::cin, input);
     while (!validator(input)) {
         std::cout << (errorMessage == "" ? prompt : errorMessage);
-        //getline(std::cin, input);
+        getline(std::cin, input);
     }
     return input;
 }

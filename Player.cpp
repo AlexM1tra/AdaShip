@@ -8,8 +8,8 @@ Player::Player(std::vector<Boat> ships) : playerBoard(Board(10, 10, ships)) {
     srand(time(NULL));
 }
 
-std::vector<Boat::BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Coordinate startingPoint) {
-    std::vector<Boat::BoatPosition> placementOptions;
+std::vector<BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Coordinate startingPoint) {
+    std::vector<BoatPosition> placementOptions;
     if (startingPoint.Row() - boat->Length() >= 0) {
         bool up = true;
         for (Coordinate& c : startingPoint.getConsecutiveCoordinates(Coordinate::UP, boat->Length())) {
@@ -19,7 +19,7 @@ std::vector<Boat::BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Co
         }
         if (up) {
             placementOptions.push_back(
-                    Boat::BoatPosition(
+                    BoatPosition(
                             startingPoint,
                             Coordinate(startingPoint.Column(),startingPoint.Row() - boat->Length() + 1)));
         }
@@ -33,7 +33,7 @@ std::vector<Boat::BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Co
         }
         if (down) {
             placementOptions.push_back(
-                    Boat::BoatPosition(
+                    BoatPosition(
                             startingPoint,
                             Coordinate(startingPoint.Column(), startingPoint.Row() + boat->Length() - 1)));
         }
@@ -47,7 +47,7 @@ std::vector<Boat::BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Co
         }
         if (left) {
             placementOptions.push_back(
-                    Boat::BoatPosition(
+                    BoatPosition(
                             startingPoint,
                             Coordinate(startingPoint.Column() - boat->Length() + 1, startingPoint.Row())));
         }
@@ -61,7 +61,7 @@ std::vector<Boat::BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Co
         }
         if (right) {
             placementOptions.push_back(
-                    Boat::BoatPosition(
+                    BoatPosition(
                             startingPoint,
                             Coordinate(startingPoint.Column() + boat->Length() - 1, startingPoint.Row())));
         }

@@ -4,21 +4,21 @@
 
 #include "AiPlayer.h"
 
-AiPlayer::AiPlayer(std::vector<Boat> ships, SettingsIO::BoardDimensions dimensions) : Player(ships) {
+AiPlayer::AiPlayer(std::vector<Boat> ships, BoardDimensions dimensions) : Player(ships) {
     this->playerBoard = Board(dimensions.width, dimensions.height, ships);
     this->addAllShips();
 }
 
 void AiPlayer::addAllShips() {
-    std::vector<Boat::BoatPosition> options;
+    std::vector<BoatPosition> options;
     for (Boat& boat : this->playerBoard.boats) {
-        options = std::vector<Boat::BoatPosition>();
+        options = std::vector<BoatPosition>();
         while (options.size() == 0) {
             int column = (rand() % this->playerBoard.getBoardDimensions().width) + 1;
             int row = (rand() % this->playerBoard.getBoardDimensions().height) + 1;
             options = this->getPossibleShipPlacements(&boat, Coordinate(column, row));
         }
-        Boat::BoatPosition chosenOption = options[rand() % options.size()];
+        BoatPosition chosenOption = options[rand() % options.size()];
         this->playerBoard.addBoat(&boat, chosenOption);
     }
 }
