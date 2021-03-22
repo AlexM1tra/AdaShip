@@ -1,0 +1,101 @@
+//
+// Created by Alex on 19/03/2021.
+//
+
+#include "Common.h"
+#include "SettingsIO.h"
+
+const std::string Common::alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+const std::string Common::clearScreen = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+                                        "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+                                        "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+                                        "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
+const std::string Common::title = "\n"
+                          "  ___   _ _____ _____ _    ___ ___ _  _ ___ ___  ___ \n"
+                          " | _ ) /_\\_   _|_   _| |  | __/ __| || |_ _| _ \\/ __|\n"
+                          " | _ \\/ _ \\| |   | | | |__| _|\\__ \\ __ || ||  _/\\__ \\\n"
+                          " |___/_/ \\_\\_|   |_| |____|___|___/_||_|___|_|  |___/\n"
+                          "                                                     \n\n";
+
+const std::string Common::miss = "\n"
+                                 "  __  __ ___ ___ ___ _ \n"
+                                 " |  \\/  |_ _/ __/ __| |\n"
+                                 " | |\\/| || |\\__ \\__ \\_|\n"
+                                 " |_|  |_|___|___/___(_)\n"
+                                 "                       \n\n";
+
+const std::string Common::hit = "\n"
+                                "  _  _ ___ _____ _ \n"
+                                " | || |_ _|_   _| |\n"
+                                " | __ || |  | | |_|\n"
+                                " |_||_|___| |_| (_)\n"
+                                "                   \n\n";
+
+const std::string Common::hit_and_sunk = "\n"
+                                         "  _  _ ___ _____     _     ___ _   _ _  _ _  ___ \n"
+                                         " | || |_ _|_   _|  _| |_  / __| | | | \\| | |/ / |\n"
+                                         " | __ || |  | |   |_   _| \\__ \\ |_| | .` | ' <|_|\n"
+                                         " |_||_|___| |_|     |_|   |___/\\___/|_|\\_|_|\\_(_)\n"
+                                         "                                                 \n\n";
+
+const std::string Common::you_win = "\n"
+                                    " __   _____  _   _  __      _____ _  _ _ \n"
+                                    " \\ \\ / / _ \\| | | | \\ \\    / /_ _| \\| | |\n"
+                                    "  \\ V / (_) | |_| |  \\ \\/\\/ / | || .` |_|\n"
+                                    "   |_| \\___/ \\___/    \\_/\\_/ |___|_|\\_(_)\n"
+                                    "                                         \n\n";
+
+const std::string Common::you_lose = "\n"
+                                     " __   _____  _   _   _    ___  ___ ___ _ \n"
+                                     " \\ \\ / / _ \\| | | | | |  / _ \\/ __| __| |\n"
+                                     "  \\ V / (_) | |_| | | |_| (_) \\__ \\ _||_|\n"
+                                     "   |_| \\___/ \\___/  |____\\___/|___/___(_)\n"
+                                     "                                         \n\n";
+
+std::string Common::validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage) {
+    std::cout << prompt;
+    std::string input = "";
+    //getline(std::cin, input);
+    while (!validator(input)) {
+        std::cout << (errorMessage == "" ? prompt : errorMessage);
+        //getline(std::cin, input);
+    }
+    return input;
+}
+
+std::string Common::centerHorizontally(std::string message, int width) {
+    if (std::find(message.begin(), message.end(), '\n') == message.end()) {
+        return (width / 2) - (message.size() / 2) >= 0
+            ? std::string((width / 2) - (message.size() / 2), ' ') + message
+            : message;
+    }
+    std::string returnString = "";
+    int lPad = -1;
+    int firstLineLength = 0;
+    std::string buffer = "";
+    for (auto c : message) {
+        firstLineLength++;
+        buffer += c;
+        if (c == '\n') {
+            if (lPad == -1)
+                lPad = (width / 2) - (firstLineLength / 2);
+            returnString += std::string(lPad >= 0 ? lPad : 0, ' ') + buffer;
+            buffer = "";
+        }
+    }
+    return returnString;
+}
+
+std::string Common::centerVertically(std::string message, int height) {
+    int lines = 0;
+    for (auto c : message)
+        if (c == '\n')
+            lines++;
+    return message + std::string((height / 2) - (lines / 2), '\n');
+}
+
+std::string Common::centerFully(std::string message) {
+    return centerVertically(centerHorizontally(message, SettingsIO::screenWidth), SettingsIO::screenHeight);
+}
