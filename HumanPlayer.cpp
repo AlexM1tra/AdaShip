@@ -19,7 +19,8 @@ void HumanPlayer::addAllShips() {
 }
 
 void HumanPlayer::addShip(Boat* boat) {
-    std::cout << "\n" << this->playerBoard.getBoardForOwnerAsString() << "\n\n";
+    this->printShipsToPlace(boat);
+    std::cout << this->playerBoard.getBoardForOwnerAsString() << "\n\n";
     std::string anchor = Common::validatedInput(
             "Enter coordinate: ",
             [](std::string input) {
@@ -27,8 +28,9 @@ void HumanPlayer::addShip(Boat* boat) {
                     && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
                     && Coordinate(input).Column() <= SettingsIO::currentDimensions().width;
             });
+    this->printShipsToPlace(boat);
     std::vector<BoatPosition> options = this->getPossibleShipPlacements(boat, Coordinate(anchor));
-    std::cout << "\n" << this->playerBoard.getBoardWithPlacementOptions(options) << "\n";
+    std::cout << this->playerBoard.getBoardWithPlacementOptions(options) << "\n\n";
     std::string chosenOption = Common::validatedInput(
             "Choose one of the placement options shown above (or C to choose again): ",
             [options](std::string input){
@@ -46,9 +48,27 @@ void HumanPlayer::addShip(Boat* boat) {
         this->playerBoard.addBoat(boat, options[stoi(chosenOption) - 1]);
 }
 
+void HumanPlayer::printShipsToPlace(Boat* boat) {
+    std::cout << Common::clearScreen;
+    for (Boat& otherBoat : this->playerBoard.boats) {
+      if (&otherBoat == boat) {
+        for (int i = 0; i < otherBoat.Length(); i++)
+          std::cout << "■ ";
+        std::cout << ": " << otherBoat.Name() << " <<" << std::endl;
+      }
+      else {
+        for (int i = 0; i < otherBoat.Length(); i++)
+          std::cout << "■ ";
+        std::cout << ": " << otherBoat.Name() << std::endl;
+      }
+    }
+    std::cout << "\n";
+}
+
 void HumanPlayer::showTurnUI(std::string opponentBoard) {
-    std::cout << "\nAttack\n" << opponentBoard << std::endl;
-    std::cout << "Your Board\n\n" << this->playerBoard.getBoardForOwnerAsString();
+    std::cout << Common::clearScreen;
+    std::cout << "\n" << Common::centerHorizontally("Attack", SettingsIO::screenWidth) << "\n\n" << opponentBoard;
+    std::cout << "\n" << Common::centerHorizontally("Your Board", SettingsIO::screenWidth) << "\n\n" << this->playerBoard.getBoardForOwnerAsString() << "\n" << std::endl;
 }
 
 Coordinate* HumanPlayer::move() {

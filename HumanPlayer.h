@@ -16,6 +16,7 @@ public:
     void processTurnResult(Board::TurnResult result, Coordinate* chosenSquare) override;
 private:
     void addShip(Boat*);
+    void printShipsToPlace(Boat*);
 };
 
 #endif //ADASHIPPROJECT_HUMANPLAYER_H

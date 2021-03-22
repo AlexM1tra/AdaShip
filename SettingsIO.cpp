@@ -13,10 +13,11 @@ std::pair<BoardDimensions, std::vector<Boat>> SettingsIO::getSettings() {
     std::vector<Boat> boats;
     BoardDimensions dimensions = readBoardDimensions(lines[0]);
     lines.erase(lines.begin());
-
     for (std::string& line : lines) {
-        int commaPlace = std::find(line.begin(), line.end(), ',') - line.begin();
-        boats.push_back(Boat(line.substr(6, commaPlace - 6), stoi(line.substr(commaPlace + 2, line.size() - (commaPlace + 2)))));
+        if (line.substr(0, 6) == "Boat: ") {
+          int commaPlace = std::find(line.begin(), line.end(), ',') - line.begin();
+          boats.push_back(Boat(line.substr(6, commaPlace - 6), stoi(line.substr(commaPlace + 2, line.size() - (commaPlace + 2)))));
+        }
     }
     screenWidth = 3 * dimensions.width + 2;
     screenHeight = 2 * dimensions.height + 5;
