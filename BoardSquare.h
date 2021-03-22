@@ -27,7 +27,7 @@ public:
     }
     static BoardSquare* HIT() {
         if (!_hit)
-            _hit = new BoardSquare("[H]");
+            _hit = new BoardSquare("\033[31m[H]\033[0m");
         return _hit;
     }
     static BoardSquare* MISS() {

@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 #include "Board.h"
 
@@ -22,6 +23,7 @@ public:
 protected:
     Player(std::vector<Boat> ships);
     std::vector<BoatPosition> getPossibleShipPlacements(Boat* boat, Coordinate startingPoint);
+    void autoPlaceShip(Boat* boat);
 };
 
 #endif //ADASHIPPROJECT_PLAYER_H

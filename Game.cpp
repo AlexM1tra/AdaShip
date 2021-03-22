@@ -49,4 +49,5 @@ void Game::Start() {
             std::this_thread::sleep_for (std::chrono::seconds(1));
         }
     }
+    std::cout << player1->playerBoard.getBoardForOwnerAsString() << "\n\n" << player2->playerBoard.getBoardForOwnerAsString();
 }

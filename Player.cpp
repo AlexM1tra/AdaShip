@@ -68,3 +68,14 @@ std::vector<BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Coordina
     }
     return placementOptions;
 }
+
+void Player::autoPlaceShip(Boat* boat) {
+        std::vector<BoatPosition> options = std::vector<BoatPosition>();
+        while (options.size() == 0) {
+            int column = (rand() % this->playerBoard.getBoardDimensions().width) + 1;
+            int row = (rand() % this->playerBoard.getBoardDimensions().height) + 1;
+            options = this->getPossibleShipPlacements(boat, Coordinate(column, row));
+        }
+        BoatPosition chosenOption = options[rand() % options.size()];
+        this->playerBoard.addBoat(boat, chosenOption);
+}
