@@ -10,7 +10,6 @@
 #include "Coordinate.h"
 #include "BoardSquare.h"
 #include "Boat.h"
-#include "SettingsIO.h"
 
 namespace std {
 
@@ -39,7 +38,6 @@ public:
     BoardSquare* getStatusOfSquare(Coordinate);
     void addBoat(Boat*, BoatPosition);
     TurnResult attackSquare(Coordinate&);
-    BoardDimensions getBoardDimensions();
     Boat* getBoatAtCoordinate(Coordinate*);
     std::vector<Boat> boats;
     std::vector<Boat*> unsunkShips;

@@ -64,7 +64,8 @@ void SettingsIO::writeToSettingsFile(std::vector<std::string> lines) {
     std::ofstream Settings;
     Settings.open("adaship_config.ini");
     for (auto& line : lines) {
-        Settings << line << "\n";
+        if (line != "\n")
+          Settings << line << "\n";
     }
     Settings.close();
 }
