@@ -56,7 +56,7 @@ void showMenu() {
     std::cout << Common::title;
     std::cout << "\n\n" << Common::centerHorizontally("Please choose an option:", 54);
     std::cout << "\n" << Common::centerHorizontally("1. Play a game against an AI", 54);
-    std::cout << "\n" << Common::centerHorizontally("2. Show a game between 2 AIs", 54);
+    std::cout << "\n" << Common::centerHorizontally("2. Play a 2 player game", 54);
     std::cout << "\n" << Common::centerHorizontally("3. Open settings", 54) << "\n\n";
     std::string chosenOption = Common::validatedInput(
         "",

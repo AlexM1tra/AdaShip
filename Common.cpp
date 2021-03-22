@@ -59,6 +59,12 @@ const std::string Common::settings = "\n"
                                      " \\__ \\ _|  | |   | |  | || .` | (_ \\__ \\\n"
                                      " |___/___| |_|   |_| |___|_|\\_|\\___|___/\n";
 
+const std::string Common::place_boat = "\n"
+                                       "  ___ _      _   ___ ___   ___  ___   _ _____ \n"
+                                       " | _ \\ |    /_\\ / __| __| | _ )/ _ \\ /_\\_   _|\n"
+                                       " |  _/ |__ / _ \\ (__| _|  | _ \\ (_) / _ \\| |  \n"
+                                       " |_| |____/_/ \\_\\___|___| |___/\\___/_/ \\_\\_|  \n";
+
 std::string Common::validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage) {
     std::cout << prompt;
     std::string input = "";
@@ -78,7 +84,7 @@ std::function<bool(std::string)> Common::isOneOf(std::vector<std::string> option
 
 std::string Common::centerHorizontally(std::string message, int width) {
     if (std::find(message.begin(), message.end(), '\n') == message.end()) {
-        return (width / 2) - (message.size() / 2) >= 0
+        return (width - message.size()) / 2 >= 0
             ? std::string((width / 2) - (message.size() / 2), ' ') + message
             : message;
     }
@@ -91,7 +97,7 @@ std::string Common::centerHorizontally(std::string message, int width) {
         buffer += c;
         if (c == '\n') {
             if (lPad == -1)
-                lPad = (width / 2) - (firstLineLength / 2);
+                lPad = (width - firstLineLength) / 2;
             returnString += std::string(lPad >= 0 ? lPad : 0, ' ') + buffer;
             buffer = "";
         }

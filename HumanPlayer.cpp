@@ -50,6 +50,7 @@ void HumanPlayer::addShip(Boat* boat) {
 
 void HumanPlayer::printShipsToPlace(Boat* boat) {
     std::cout << Common::clearScreen;
+    std::cout << Common::place_boat << "\n\n";
     for (Boat& otherBoat : this->playerBoard.boats) {
       if (&otherBoat == boat) {
         for (int i = 0; i < otherBoat.Length(); i++)
