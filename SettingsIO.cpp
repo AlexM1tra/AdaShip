@@ -18,7 +18,8 @@ std::pair<BoardDimensions, std::vector<Boat>> SettingsIO::getSettings() {
         int commaPlace = std::find(line.begin(), line.end(), ',') - line.begin();
         boats.push_back(Boat(line.substr(6, commaPlace - 6), stoi(line.substr(commaPlace + 2, line.size() - (commaPlace + 2)))));
     }
-
+    screenWidth = 3 * dimensions.width + 2;
+    screenHeight = 2 * dimensions.height + 5;
     boardDimensions = dimensions;
     return std::pair<BoardDimensions, std::vector<Boat>>(dimensions, boats);
 };
@@ -49,7 +50,6 @@ void SettingsIO::updateBoardDimensions(BoardDimensions dimensions) {
 std::vector<std::string> SettingsIO::readSettingsFile() {
     std::vector<std::string> lines;
     std::string line;
-
     std::ifstream Settings;
     Settings.open("adaship_config.ini");
     while (!Settings.eof()) {
@@ -71,3 +71,5 @@ void SettingsIO::writeToSettingsFile(std::vector<std::string> lines) {
 }
 
 BoardDimensions SettingsIO::boardDimensions = BoardDimensions(0, 0);
+int SettingsIO::screenWidth = 0;
+int SettingsIO::screenHeight = 0;

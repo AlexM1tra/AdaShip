@@ -21,8 +21,9 @@ public:
     static std::pair<BoardDimensions, std::vector<Boat>> getSettings();
     static BoardDimensions readBoardDimensions(std::string dimensions);
     static void updateBoardDimensions(BoardDimensions dimensions);
-    static const int screenWidth = 10*3 + 5;
-    static const int screenHeight = 10*2 + 10;
+
+    static int screenWidth;
+    static int screenHeight;
 
 private:
     static std::vector<std::string> readSettingsFile();

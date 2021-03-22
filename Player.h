@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "Board.h"
+#include "SettingsIO.h"
 
 class Player {
 public:
