@@ -48,6 +48,22 @@ void SettingsIO::updateBoardDimensions(BoardDimensions dimensions) {
     boardDimensions = dimensions;
 }
 
+void SettingsIO::addBoat(Boat boat) {
+    std::vector<std::string> lines = readSettingsFile();
+    lines.push_back("Boat: " + boat.Name() + ", " + std::to_string(boat.Length()));
+    writeToSettingsFile(lines);
+}
+
+void SettingsIO::removeBoat(Boat boat) {
+    std::vector<std::string> lines = readSettingsFile();
+    std::vector<Boat> boats = getSettings().second;
+    for (int i = 0; i < boats.size(); i++) {
+      if (boat.Name() == boats[i].Name())
+        lines.erase(lines.begin() + i + 1); // Add 1 because first line is board size.
+    }
+    writeToSettingsFile(lines);
+}
+
 std::vector<std::string> SettingsIO::readSettingsFile() {
     std::vector<std::string> lines;
     std::string line;

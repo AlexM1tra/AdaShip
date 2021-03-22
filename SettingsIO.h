@@ -13,6 +13,9 @@ struct BoardDimensions {
     int width;
     int height;
     BoardDimensions(int width, int height) : width(width), height(height) {}
+    std::string toString() {
+      return std::to_string(width) + "x" + std::to_string(height);
+    }
 };
 
 class SettingsIO {
@@ -21,6 +24,8 @@ public:
     static std::pair<BoardDimensions, std::vector<Boat>> getSettings();
     static BoardDimensions readBoardDimensions(std::string dimensions);
     static void updateBoardDimensions(BoardDimensions dimensions);
+    static void addBoat(Boat boat);
+    static void removeBoat(Boat boat);
 
     static int screenWidth;
     static int screenHeight;
