@@ -20,7 +20,9 @@ struct Common {
     static const std::string hit_and_sunk;
     static const std::string you_win;
     static const std::string you_lose;
+    static const std::string settings;
     static std::string validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage = "");
+    static std::function<bool(std::string)> isOneOf(std::vector<std::string> options);
     static std::string centerHorizontally(std::string message, int width);
     static std::string centerVertically(std::string message, int height);
     static std::string centerFully(std::string message);

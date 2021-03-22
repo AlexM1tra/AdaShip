@@ -9,7 +9,7 @@
 
 class HumanPlayer : public Player {
 public:
-    HumanPlayer(std::vector<Boat> ships, BoardDimensions dimensions);
+    HumanPlayer(std::vector<Boat> ships);
     void addAllShips() override;
     void showTurnUI(std::string) override;
     Coordinate* move() override;

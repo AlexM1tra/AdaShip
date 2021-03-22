@@ -136,10 +136,6 @@ Board::TurnResult Board::attackSquare(Coordinate& square) {
         return TurnResult::ALREADY_ATTACKED;
 }
 
-BoardDimensions Board::getBoardDimensions() {
-    return BoardDimensions(this->width, this->height);
-}
-
 Boat* Board::getBoatAtCoordinate(Coordinate* c) {
     if (this->coordinateToBoat.find(*c) != this->coordinateToBoat.end())
         return this->coordinateToBoat[*c];

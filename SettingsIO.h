@@ -17,49 +17,17 @@ struct BoardDimensions {
 
 class SettingsIO {
 public:
-
-    static std::pair<BoardDimensions, std::vector<Boat>> readSettings() {
-        std::vector<std::string> lines;
-        std::string line;
-
-        std::ifstream Settings;
-        Settings.open("adaship_config.ini");
-        while (!Settings.eof()) {
-            std::getline(Settings, line);
-            lines.push_back(line);
-        }
-        Settings.close();
-
-        std::vector<Boat> boats;
-        BoardDimensions dimensions = readBoardDimensions(lines[0]);
-        lines.erase(lines.begin());
-
-        for (std::string& line : lines) {
-            int commaPlace = std::find(line.begin(), line.end(), ',') - line.begin();
-            boats.push_back(Boat(line.substr(6, commaPlace - 6), stoi(line.substr(commaPlace + 2, line.size() - (commaPlace + 2)))));
-        }
-
-        return std::pair<BoardDimensions, std::vector<Boat>>(dimensions, boats);
-    };
-
-    static BoardDimensions readBoardDimensions(std::string dimensions) {
-        bool isSecondNumber = false;
-        std::string firstNumber = "", secondNumber = "";
-        for (int i = 7; i < dimensions.size(); i++) {
-            if (!isSecondNumber) {
-                if (dimensions[i] == 'x')
-                    isSecondNumber = true;
-                else
-                    firstNumber += dimensions[i];
-            } else {
-                secondNumber += dimensions[i];
-            }
-        }
-        return BoardDimensions(stoi(firstNumber), stoi(secondNumber));
-    }
-
+    static BoardDimensions currentDimensions();
+    static std::pair<BoardDimensions, std::vector<Boat>> getSettings();
+    static BoardDimensions readBoardDimensions(std::string dimensions);
+    static void updateBoardDimensions(BoardDimensions dimensions);
     static const int screenWidth = 10*3 + 5;
     static const int screenHeight = 10*2 + 10;
+
+private:
+    static std::vector<std::string> readSettingsFile();
+    static void writeToSettingsFile(std::vector<std::string> lines);
+    static BoardDimensions boardDimensions;
 };
 
 #endif //ADASHIPPROJECT_SETTINGSIO_H

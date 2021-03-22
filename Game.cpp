@@ -5,25 +5,22 @@
 #include <thread>
 #include <chrono>
 #include "Game.h"
-#include "AiPlayer.h"
-#include "HumanPlayer.h"
-#include "Common.h"
 
 Game::Game(int numberOfPlayers) {
     this->numberOfPlayers = numberOfPlayers;
     srand(time(NULL));
-    std::pair<BoardDimensions, std::vector<Boat>> settings = SettingsIO::readSettings();
+    std::pair<BoardDimensions, std::vector<Boat>> settings = SettingsIO::getSettings();
     availableShips = settings.second;
     isPlayer1Turn = true;
     if (numberOfPlayers == 0) {
-        player1 = new AiPlayer(availableShips, settings.first);
-        player2 = new AiPlayer(availableShips, settings.first);
+        player1 = new AiPlayer(availableShips);
+        player2 = new AiPlayer(availableShips);
     } else if (numberOfPlayers == 1) {
-        player1 = new HumanPlayer(availableShips, settings.first);
-        player2 = new AiPlayer(availableShips, settings.first);
+        player1 = new HumanPlayer(availableShips);
+        player2 = new AiPlayer(availableShips);
     } else {
-        player1 = new HumanPlayer(availableShips, settings.first);
-        player2 = new HumanPlayer(availableShips, settings.first);
+        player1 = new HumanPlayer(availableShips);
+        player2 = new HumanPlayer(availableShips);
     }
 }
 

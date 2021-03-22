@@ -53,6 +53,12 @@ const std::string Common::you_lose = "\n"
                                      "   |_| \\___/ \\___/  |____\\___/|___/___(_)\n"
                                      "                                         \n\n";
 
+const std::string Common::settings = "\n"
+                                     "  ___ ___ _____ _____ ___ _  _  ___ ___ \n"
+                                     " / __| __|_   _|_   _|_ _| \\| |/ __/ __|\n"
+                                     " \\__ \\ _|  | |   | |  | || .` | (_ \\__ \\\n"
+                                     " |___/___| |_|   |_| |___|_|\\_|\\___|___/\n";
+
 std::string Common::validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage) {
     std::cout << prompt;
     std::string input = "";
@@ -62,6 +68,12 @@ std::string Common::validatedInput(std::string_view prompt, std::function<bool(s
         getline(std::cin, input);
     }
     return input;
+}
+
+std::function<bool(std::string)> Common::isOneOf(std::vector<std::string> options) {
+  return [&options](std::string input) {
+    return std::find(options.begin(), options.end(), input) != options.end();
+  };
 }
 
 std::string Common::centerHorizontally(std::string message, int width) {

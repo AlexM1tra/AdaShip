@@ -4,7 +4,7 @@
 
 #include "Player.h"
 
-Player::Player(std::vector<Boat> ships) : playerBoard(Board(10, 10, ships)) {
+Player::Player(std::vector<Boat> ships) : playerBoard(Board(SettingsIO::currentDimensions().width, SettingsIO::currentDimensions().height, ships)) {
     srand(time(NULL));
 }
 
@@ -24,7 +24,7 @@ std::vector<BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Coordina
                             Coordinate(startingPoint.Column(),startingPoint.Row() - boat->Length() + 1)));
         }
     }
-    if (startingPoint.Row() + boat->Length() <= this->playerBoard.getBoardDimensions().height + 1) {
+    if (startingPoint.Row() + boat->Length() <= SettingsIO::currentDimensions().height + 1) {
         bool down = true;
         for (Coordinate& c : startingPoint.getConsecutiveCoordinates(Coordinate::DOWN, boat->Length())) {
             if (this->playerBoard.getStatusOfSquare(c) == BoardSquare::BOAT()) {
@@ -52,7 +52,7 @@ std::vector<BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Coordina
                             Coordinate(startingPoint.Column() - boat->Length() + 1, startingPoint.Row())));
         }
     }
-    if (startingPoint.Column() + boat->Length() <= this->playerBoard.getBoardDimensions().width + 1) {
+    if (startingPoint.Column() + boat->Length() <= SettingsIO::currentDimensions().width + 1) {
         bool right = true;
         for (Coordinate& c : startingPoint.getConsecutiveCoordinates(Coordinate::RIGHT, boat->Length())) {
             if (this->playerBoard.getStatusOfSquare(c) == BoardSquare::BOAT()) {
@@ -72,8 +72,8 @@ std::vector<BoatPosition> Player::getPossibleShipPlacements(Boat *boat, Coordina
 void Player::autoPlaceShip(Boat* boat) {
         std::vector<BoatPosition> options = std::vector<BoatPosition>();
         while (options.size() == 0) {
-            int column = (rand() % this->playerBoard.getBoardDimensions().width) + 1;
-            int row = (rand() % this->playerBoard.getBoardDimensions().height) + 1;
+            int column = (rand() % SettingsIO::currentDimensions().width) + 1;
+            int row = (rand() % SettingsIO::currentDimensions().height) + 1;
             options = this->getPossibleShipPlacements(boat, Coordinate(column, row));
         }
         BoatPosition chosenOption = options[rand() % options.size()];

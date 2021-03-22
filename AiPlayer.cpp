@@ -3,9 +3,9 @@
 //
 
 #include "AiPlayer.h"
+#include "SettingsIO.h"
 
-AiPlayer::AiPlayer(std::vector<Boat> ships, BoardDimensions dimensions) : Player(ships) {
-    this->playerBoard = Board(dimensions.width, dimensions.height, ships);
+AiPlayer::AiPlayer(std::vector<Boat> ships) : Player(ships) {
     this->addAllShips();
 }
 
@@ -22,8 +22,8 @@ Coordinate* AiPlayer::move() {
         squareCache.pop_back();
         return square;
     }
-    return new Coordinate((rand() % this->playerBoard.getBoardDimensions().width) + 1,
-                          (rand() % this->playerBoard.getBoardDimensions().height) + 1);
+    return new Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
+                          (rand() % SettingsIO::currentDimensions().height) + 1);
 }
 
 void AiPlayer::processTurnResult(Board::TurnResult result, Coordinate* chosenSquare) {
@@ -34,10 +34,10 @@ void AiPlayer::processTurnResult(Board::TurnResult result, Coordinate* chosenSqu
         if (!(chosenSquare->Row() == 1)) {
             squareCache.push_back(Coordinate(chosenSquare->Column(), chosenSquare->Row() - 1));
         }
-        if (!(chosenSquare->Column() == this->playerBoard.getBoardDimensions().width)) {
+        if (!(chosenSquare->Column() == SettingsIO::currentDimensions().width)) {
             squareCache.push_back(Coordinate(chosenSquare->Column() + 1, chosenSquare->Row()));
         }
-        if (!(chosenSquare->Row() == this->playerBoard.getBoardDimensions().height)) {
+        if (!(chosenSquare->Row() == SettingsIO::currentDimensions().height)) {
             squareCache.push_back(Coordinate(chosenSquare->Column(), chosenSquare->Row() + 1));
         }
     } else if (result == Board::TurnResult::HIT_AND_SUNK) {

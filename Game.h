@@ -10,6 +10,9 @@
 
 #include "Player.h"
 #include "SettingsIO.h"
+#include "AiPlayer.h"
+#include "HumanPlayer.h"
+#include "Common.h"
 
 class Game {
 public:
