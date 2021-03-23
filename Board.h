@@ -39,6 +39,7 @@ public:
     void addBoat(Boat*, BoatPosition);
     TurnResult attackSquare(Coordinate&);
     Boat* getBoatAtCoordinate(Coordinate*);
+    void clear();
     std::vector<Boat> boats;
     std::vector<Boat*> unsunkShips;
 private:

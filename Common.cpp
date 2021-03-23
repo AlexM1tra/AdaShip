@@ -65,6 +65,18 @@ const std::string Common::place_boat = "\n"
                                        " |  _/ |__ / _ \\ (__| _|  | _ \\ (_) / _ \\| |  \n"
                                        " |_| |____/_/ \\_\\___|___| |___/\\___/_/ \\_\\_|  \n";
 
+const std::string Common::player1 = "\n"
+                                    "  ___ _      ___   _____ ___   _ \n"
+                                    " | _ \\ |    /_\\ \\ / / __| _ \\ / |\n"
+                                    " |  _/ |__ / _ \\ V /| _||   / | |\n"
+                                    " |_| |____/_/ \\_\\_| |___|_|_\\ |_|\n";
+
+const std::string Common::player2 = "\n"
+                                    "  ___ _      ___   _____ ___   ___ \n"
+                                    " | _ \\ |    /_\\ \\ / / __| _ \\ |_  )\n"
+                                    " |  _/ |__ / _ \\ V /| _||   /  / / \n"
+                                    " |_| |____/_/ \\_\\_| |___|_|_\\ /___|\n";
+
 std::string Common::validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage) {
     std::cout << prompt;
     std::string input = "";

@@ -71,7 +71,8 @@ std::vector<std::string> SettingsIO::readSettingsFile() {
     Settings.open("adaship_config.ini");
     while (!Settings.eof()) {
         std::getline(Settings, line);
-        lines.push_back(line);
+        if (line.size() > 6)
+          lines.push_back(line);
     }
     Settings.close();
     return lines;
@@ -81,7 +82,7 @@ void SettingsIO::writeToSettingsFile(std::vector<std::string> lines) {
     std::ofstream Settings;
     Settings.open("adaship_config.ini");
     for (auto& line : lines) {
-        if (line != "\n")
+        if (line.size() > 6)
           Settings << line << "\n";
     }
     Settings.close();

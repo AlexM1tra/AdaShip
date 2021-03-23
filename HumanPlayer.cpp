@@ -12,22 +12,46 @@ HumanPlayer::HumanPlayer(std::vector<Boat> ships) : Player(ships) {
     this->addAllShips();
 }
 
+HumanPlayer::HumanPlayer(std::vector<Boat> ships, int playerNumber) : Player(ships) {
+    this->playerNumber = playerNumber;
+    this->addAllShips();
+}
+
 void HumanPlayer::addAllShips() {
-    for (Boat& boat : this->playerBoard.boats) {
-        addShip(&boat);
+    bool autoPlaceRemaining = false;
+    bool resetBoard = true;
+    while (resetBoard) {
+        playerBoard.clear();
+        resetBoard = false;
+        for (Boat& boat : this->playerBoard.boats) {
+            if (autoPlaceRemaining)
+                this->autoPlaceShip(&boat);
+            else {
+                this->printShipsToPlace(&boat);
+                std::cout << this->playerBoard.getBoardForOwnerAsString() << "\n\n";
+                std::string anchor = Common::validatedInput(
+                        "A- Autoplace Ship.\nA*- Autoplace all remaining Ships.\nR- Reset board\n\nEnter coordinate or use one of the above options: ",
+                        [](std::string input) {
+                            return input == "A" || input == "A*" || input == "R" || (Coordinate::isCoordinate(input)
+                                && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
+                                && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
+                        });
+                if (anchor == "A") {
+                  this->autoPlaceShip(&boat);
+                } else if (anchor == "A*") {
+                  this->autoPlaceShip(&boat);
+                  autoPlaceRemaining = true;
+                } else if (anchor == "R") {
+                  resetBoard = true;
+                } else {
+                  this->addShip(&boat, anchor);
+                }
+            }
+        }
     }
 }
 
-void HumanPlayer::addShip(Boat* boat) {
-    this->printShipsToPlace(boat);
-    std::cout << this->playerBoard.getBoardForOwnerAsString() << "\n\n";
-    std::string anchor = Common::validatedInput(
-            "Enter coordinate: ",
-            [](std::string input) {
-                return Coordinate::isCoordinate(input)
-                    && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
-                    && Coordinate(input).Column() <= SettingsIO::currentDimensions().width;
-            });
+bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
     this->printShipsToPlace(boat);
     std::vector<BoatPosition> options = this->getPossibleShipPlacements(boat, Coordinate(anchor));
     std::cout << this->playerBoard.getBoardWithPlacementOptions(options) << "\n\n";
@@ -46,10 +70,13 @@ void HumanPlayer::addShip(Boat* boat) {
         this->addShip(boat);
     else
         this->playerBoard.addBoat(boat, options[stoi(chosenOption) - 1]);
+    return false;
 }
 
 void HumanPlayer::printShipsToPlace(Boat* boat) {
     std::cout << Common::clearScreen;
+    if (this->playerNumber != 0)
+      std::cout << (this->playerNumber == 1 ? Common::player1 : Common::player2);
     std::cout << Common::place_boat << "\n\n";
     for (Boat& otherBoat : this->playerBoard.boats) {
       if (&otherBoat == boat) {
@@ -68,18 +95,22 @@ void HumanPlayer::printShipsToPlace(Boat* boat) {
 
 void HumanPlayer::showTurnUI(std::string opponentBoard) {
     std::cout << Common::clearScreen;
+    if (this->playerNumber != 0)
+      std::cout << (this->playerNumber == 1 ? Common::player1 : Common::player2);
     std::cout << "\n" << Common::centerHorizontally("Attack", SettingsIO::screenWidth) << "\n\n" << opponentBoard;
     std::cout << "\n" << Common::centerHorizontally("Your Board", SettingsIO::screenWidth) << "\n\n" << this->playerBoard.getBoardForOwnerAsString() << "\n" << std::endl;
 }
 
 Coordinate* HumanPlayer::move() {
     std::string chosenCoordinate = Common::validatedInput(
-            "Enter coordinate: ",
+            "Type Q to quit.\nEnter coordinate: ",
             [](std::string input) {
-                return Coordinate::isCoordinate(input)
+                return input == "Q" || (Coordinate::isCoordinate(input)
                     && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
-                    && Coordinate(input).Column() <= SettingsIO::currentDimensions().width;
+                    && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
             });
+    if (chosenCoordinate == "Q")
+      return nullptr;
     return new Coordinate(chosenCoordinate);
 }
 

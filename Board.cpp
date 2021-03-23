@@ -141,3 +141,9 @@ Boat* Board::getBoatAtCoordinate(Coordinate* c) {
         return this->coordinateToBoat[*c];
     return nullptr;
 }
+
+void Board::clear() {
+    this->boardMatrix = std::vector<std::vector<BoardSquare*>>(height, std::vector<BoardSquare*>(width, BoardSquare::EMPTY()));
+    this->coordinateToBoat = std::unordered_map<Coordinate, Boat*>();
+    this->unsunkShips.clear();
+}
