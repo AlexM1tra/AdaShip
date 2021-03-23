@@ -87,13 +87,19 @@ const std::string Common::player2 = "\n"
                                     " |  _/ |__ / _ \\ V /| _||   /  / / \n"
                                     " |_| |____/_/ \\_\\_| |___|_|_\\ /___|\n";
 
-std::string Common::validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage) {
+std::string Common::validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage, bool autoCapitalise) {
     std::cout << prompt;
     std::string input = "";
     getline(std::cin, input);
+    if (autoCapitalise)
+        for (auto& c : input)
+            c = toupper(c);
     while (!validator(input)) {
         std::cout << (errorMessage == "" ? prompt : errorMessage);
         getline(std::cin, input);
+        if (autoCapitalise)
+            for (auto& c : input)
+                c = toupper(c);
     }
     return input;
 }

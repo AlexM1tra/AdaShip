@@ -46,7 +46,7 @@ void Game::Start() {
                                         : result == Board::TurnResult::HIT ? "Hit"
                                         : result == Board::TurnResult::HIT_AND_SUNK ? "Hit & Sunk"
                                         : "Mine");
-            std::cout << "\n" << chosenSquare->Name() << ": " << resultAsString << "\n\nPress enter to continue: ";
+            std::cout << "\n" << chosenSquare->Name() << ": " << resultAsString << "\n\nPress [Enter] to end turn...";
             getline(std::cin, resultAsString); 
         }
     }
@@ -79,7 +79,7 @@ void Game::SalvoStart() {
         }
         isPlayer1Turn = !isPlayer1Turn;
         activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
-        std::cout << "\n" << goResult.substr(0, goResult.size() - 2) << "\n\nPress enter to continue: ";
+        std::cout << "\n" << goResult.substr(0, goResult.size() - 2) << "\n\nPress [Enter] to end turn...";
         getline(std::cin, goResult);
         goResult = ""; 
     }

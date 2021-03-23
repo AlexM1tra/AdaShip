@@ -30,7 +30,9 @@ boatPlacementStart:
                             return input == "A" || input == "A*" || input == "R" || (Coordinate::isCoordinate(input)
                                 && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
                                 && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
-                        });
+                        }, 
+                        "Enter coordinate or use one of the above options: ",
+                        true);
                 if (anchor == "A")
                   this->autoPlaceShip(&boat);
                 else if (anchor == "A*") {
@@ -59,7 +61,8 @@ bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
                         input) != optionNumbers.begin() + options.size()
                        || input == "C";
             },
-            "Invalid option. Please choose one of the options shown above: ");
+            "Invalid option. Please choose one of the options shown above: ",
+            true);
     if (chosenOption == "C")
         return true;
     else
@@ -92,7 +95,9 @@ Coordinate* HumanPlayer::move() {
                 return input == "A" || input == "Q" || (Coordinate::isCoordinate(input)
                     && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
                     && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
-            });
+            }, 
+            "Enter coordinate or choose option above: ",
+            true);
     if (chosenCoordinate == "A")
         return new Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
                               (rand() % SettingsIO::currentDimensions().height) + 1);

@@ -26,7 +26,11 @@ struct Common {
     static const std::string ai2;
     static const std::string player1;
     static const std::string player2;
-    static std::string validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage = "");
+    static std::string validatedInput(
+        std::string_view prompt, 
+        std::function<bool(std::string)> validator,
+        std::string_view errorMessage = "",
+        bool autoCapitalise = false);
     static std::function<bool(std::string)> isOneOf(std::vector<std::string> options);
     static std::string centerHorizontally(std::string message, int width);
     static std::string centerVertically(std::string message, int height);
