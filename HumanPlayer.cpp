@@ -45,6 +45,16 @@ boatPlacementStart:
             }
         }
     }
+    this->printShipsToPlace(&(this->playerBoard.boats[this->playerBoard.boats.size() - 1]));
+    std::cout << this->playerBoard.getBoardForOwnerAsString() << "\n\n\n\n\n\n";
+    std::string happy = Common::validatedInput("Are you happy with the ship placements(Y/N)? ",
+                                              Common::isOneOf(std::vector<std::string>{"Y", "N"}),
+                                              " ",
+                                              true);
+    if (happy == "N") {
+      autoPlaceRemaining = false;
+      goto boatPlacementStart;
+    }
 }
 
 bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
