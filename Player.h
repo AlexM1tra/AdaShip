@@ -28,6 +28,7 @@ public:
     Player(Player&&) = delete;
     Player(Player const&) = delete;
     void showTurnUI(std::string);
+    std::string getName();
 protected:
     Player(std::vector<Boat> ships, PlayerType playerType);
     std::vector<BoatPosition> getPossibleShipPlacements(Boat* boat, Coordinate startingPoint);

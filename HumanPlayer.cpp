@@ -68,8 +68,7 @@ bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
 }
 
 void HumanPlayer::printShipsToPlace(Boat* boat) {
-    std::cout << Common::clearScreen;
-    std::cout << (this->playerType == PLAYER1 ? Common::player1 : Common::player2);
+    std::cout << Common::clearScreen << this->getName();
     std::cout << Common::place_boat << "\n\n";
     for (Boat& otherBoat : this->playerBoard.boats) {
       if (&otherBoat == boat) {

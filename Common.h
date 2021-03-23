@@ -19,8 +19,7 @@ struct Common {
     static const std::string hit;
     static const std::string hit_and_sunk;
     static const std::string mine;
-    static const std::string you_win;
-    static const std::string you_lose;
+    static const std::string wins;
     static const std::string settings;
     static const std::string place_boat;
     static const std::string ai1;

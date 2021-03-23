@@ -49,13 +49,7 @@ void Game::Start() {
             getline(std::cin, resultAsString); 
         }
     }
-    if (this->numberOfPlayers == 1) {
-        std::cout << Common::clearScreen << (player2->playerBoard.unsunkShips.size() == 0 ? Common::you_win : Common::you_lose) << std::endl;
-        for (int i = 0; i < 30; i++) {
-            std::cout << " " << std::endl;
-            std::this_thread::sleep_for (std::chrono::seconds(1));
-        }
-    }
+    showWinner();
 }
 
 void Game::SalvoStart() {
@@ -88,19 +82,21 @@ void Game::SalvoStart() {
         getline(std::cin, goResult);
         goResult = ""; 
     }
-    if (chosenSquare != nullptr) { // Indicates that quit wasn't called and the game ended.
-      if (this->numberOfPlayers == 1) {
-          std::cout << Common::clearScreen << (player2->playerBoard.unsunkShips.size() == 0 ? Common::you_win : Common::you_lose) << std::endl;
-          for (int i = 0; i < 30; i++) {
-              std::cout << " " << std::endl;
-              std::this_thread::sleep_for (std::chrono::seconds(1));
-          }
-      }
-    }
+    showWinner();
 }
 
 void Game::StartWithMines() {
     player1->playerBoard.addMines();
     player2->playerBoard.addMines();
     this->Start();
+}
+
+void Game::showWinner() {
+    std::cout << Common::clearScreen 
+              << (player1->playerBoard.unsunkShips.size() == 0 ? player2->getName() : player1->getName()) 
+              << "\n\n" << Common::wins << std::endl;
+    for (int i = 0; i < 30; i++) {
+        std::cout << " " << std::endl;
+        std::this_thread::sleep_for (std::chrono::seconds(1));
+    }
 }

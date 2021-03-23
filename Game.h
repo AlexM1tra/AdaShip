@@ -26,6 +26,7 @@ public:
     void StartWithMines();
 private:
     std::vector<Coordinate> getMinesFor(Player* player);
+    void showWinner();
     int numberOfPlayers;
 };
 
