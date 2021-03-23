@@ -13,6 +13,7 @@ public:
     static BoardSquare* BOAT();
     static BoardSquare* HIT();
     static BoardSquare* MISS();
+    static BoardSquare* MINE();
     std::string toString();
 
     bool operator==(const BoardSquare& rhs) {
@@ -25,7 +26,7 @@ private:
     static BoardSquare* _boat;
     static BoardSquare* _hit;
     static BoardSquare* _miss;
-
+    static BoardSquare* _mine;
 };
 
 #endif //ADASHIPPROJECT_BOARDSQUARE_H

@@ -25,7 +25,7 @@ public:
     void SalvoStart();
     void StartWithMines();
 private:
-    void clearSunkShips();
+    std::vector<Coordinate> getMinesFor(Player* player);
     int numberOfPlayers;
 };
 

@@ -28,6 +28,12 @@ BoardSquare* BoardSquare::MISS() {
     return _miss;
 }
 
+BoardSquare* BoardSquare::MINE() {
+    if (!_mine)
+        _mine = new BoardSquare("[●]");
+    return _mine;
+}
+
 BoardSquare::BoardSquare(std::string value) {
     this->_value = std::move(value);
 }
@@ -40,3 +46,4 @@ BoardSquare* BoardSquare::_empty = nullptr;
 BoardSquare* BoardSquare::_boat = nullptr;
 BoardSquare* BoardSquare::_hit = nullptr;
 BoardSquare* BoardSquare::_miss = nullptr;
+BoardSquare* BoardSquare::_mine = nullptr;

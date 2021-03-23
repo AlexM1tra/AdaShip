@@ -56,7 +56,6 @@ void Game::Start() {
             std::this_thread::sleep_for (std::chrono::seconds(1));
         }
     }
-    
 }
 
 void Game::SalvoStart() {
@@ -101,5 +100,7 @@ void Game::SalvoStart() {
 }
 
 void Game::StartWithMines() {
-  
+    player1->playerBoard.addMines();
+    player2->playerBoard.addMines();
+    this->Start();
 }

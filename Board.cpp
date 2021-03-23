@@ -131,6 +131,17 @@ Board::TurnResult Board::attackSquare(Coordinate& square) {
             return TurnResult::HIT;
         }
         return TurnResult::ALREADY_ATTACKED;
+    } else if (chosenSquare == BoardSquare::MINE()) {
+        this->setStatusOfSquare(square, BoardSquare::MISS());
+        for (int row = square.Row() - 1; row <= square.Row() + 1; row++) {
+            for (int col = square.Column() - 1; col <= square.Column() + 1; col++) {
+                if (row > 0 && col > 0 && row <= SettingsIO::currentDimensions().height && col <= SettingsIO::currentDimensions().width) {
+                    Coordinate attack = Coordinate(col, row);
+                    this->attackSquare(attack);
+                }
+            }
+        }
+        return TurnResult::MINE;
     }
     else // chosenSquare is either HIT() or MISS()
         return TurnResult::ALREADY_ATTACKED;
@@ -146,4 +157,16 @@ void Board::clear() {
     this->boardMatrix = std::vector<std::vector<BoardSquare*>>(height, std::vector<BoardSquare*>(width, BoardSquare::EMPTY()));
     this->coordinateToBoat = std::unordered_map<Coordinate, Boat*>();
     this->unsunkShips.clear();
+}
+
+void Board::addMines() {
+    int minesAdded = 0;
+    Coordinate c = Coordinate(1, 1);
+    while (minesAdded < 5) {
+        c =  Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
+                        (rand() % SettingsIO::currentDimensions().height) + 1);
+        if (this->getStatusOfSquare(c) == BoardSquare::EMPTY())
+            this->setStatusOfSquare(c, BoardSquare::MINE());
+            minesAdded++;
+    }
 }

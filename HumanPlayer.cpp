@@ -116,6 +116,10 @@ void HumanPlayer::processTurnResult(Board::TurnResult result, Coordinate *chosen
             std::cout << Common::clearScreen << Common::centerFully(Common::hit_and_sunk) << std::endl;
             std::this_thread::sleep_for (std::chrono::seconds(2));
             break;
+        case Board::TurnResult::MINE:
+            std::cout << Common::clearScreen << Common::centerFully(Common::mine) << std::endl;
+            std::this_thread::sleep_for (std::chrono::seconds(2));
+            break;
         case Board::TurnResult::ALREADY_ATTACKED:
             std::cout << Common::clearScreen << Common::centerFully("You've already attacked that square!!\nTry again...") << std::endl;
             std::this_thread::sleep_for (std::chrono::seconds(2));

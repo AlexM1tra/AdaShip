@@ -10,6 +10,7 @@
 #include "Coordinate.h"
 #include "BoardSquare.h"
 #include "Boat.h"
+#include "SettingsIO.h"
 
 namespace std {
 
@@ -30,6 +31,7 @@ public:
         HIT = 1,
         HIT_AND_SUNK = 2,
         ALREADY_ATTACKED = 3,
+        MINE = 4,
     };
     Board(int, int, std::vector<Boat>);
     std::string getBoardForOwnerAsString();
@@ -42,6 +44,7 @@ public:
     void clear();
     std::vector<Boat> boats;
     std::vector<Boat*> unsunkShips;
+    void addMines();
 private:
     int width, height;
     std::vector<std::vector<BoardSquare*>> boardMatrix;

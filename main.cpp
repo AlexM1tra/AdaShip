@@ -138,11 +138,14 @@ void showMenu() {
       Game game(2);
       game.SalvoStart();
     } else if (chosenOption == "5") {
-      
+      Game game(1);
+      game.StartWithMines();
     } else if (chosenOption == "6") {
-      
+      Game game(2);
+      game.StartWithMines();
     } else if (chosenOption == "7") {
-      
+      Game game(0);
+      game.StartWithMines();
     } else if (chosenOption == "8")
       showSettings();
     else
