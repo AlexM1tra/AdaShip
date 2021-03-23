@@ -20,7 +20,7 @@ std::pair<BoardDimensions, std::vector<Boat>> SettingsIO::getSettings() {
         }
     }
     screenWidth = 3 * dimensions.width + 2;
-    screenHeight = 2 * dimensions.height + 5;
+    screenHeight = 2 * dimensions.height + 15;
     boardDimensions = dimensions;
     return std::pair<BoardDimensions, std::vector<Boat>>(dimensions, boats);
 };

@@ -104,23 +104,23 @@ Coordinate* HumanPlayer::move() {
 void HumanPlayer::processTurnResult(Board::TurnResult result, Coordinate *chosenSquare) {
     switch (result) {
         case Board::TurnResult::MISS:
-            std::cout << Common::clearScreen << Common::centerFully(Common::miss) << std::endl;
+            std::cout << Common::clearScreen << Common::centerVertically(Common::miss, SettingsIO::screenHeight) << std::endl;
             std::this_thread::sleep_for (std::chrono::seconds(2));
             break;
         case Board::TurnResult::HIT:
-            std::cout << Common::clearScreen << Common::centerFully(Common::hit) << std::endl;
+            std::cout << Common::clearScreen << Common::centerVertically(Common::hit, SettingsIO::screenHeight) << std::endl;
             std::this_thread::sleep_for (std::chrono::seconds(2));
             break;
         case Board::TurnResult::HIT_AND_SUNK:
-            std::cout << Common::clearScreen << Common::centerFully(Common::hit_and_sunk) << std::endl;
+            std::cout << Common::clearScreen << Common::centerVertically(Common::hit_and_sunk, SettingsIO::screenHeight) << std::endl;
             std::this_thread::sleep_for (std::chrono::seconds(2));
             break;
         case Board::TurnResult::MINE:
-            std::cout << Common::clearScreen << Common::centerFully(Common::mine) << std::endl;
+            std::cout << Common::clearScreen << Common::centerVertically(Common::mine, SettingsIO::screenHeight) << std::endl;
             std::this_thread::sleep_for (std::chrono::seconds(2));
             break;
         case Board::TurnResult::ALREADY_ATTACKED:
-            std::cout << Common::clearScreen << Common::centerFully("You've already attacked that square!!\nTry again...") << std::endl;
+            std::cout << Common::clearScreen << Common::centerVertically("You've already attacked that square!!\nTry again...", SettingsIO::screenHeight) << std::endl;
             std::this_thread::sleep_for (std::chrono::seconds(2));
     }
 }

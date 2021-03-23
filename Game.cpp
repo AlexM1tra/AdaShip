@@ -93,9 +93,8 @@ void Game::StartWithMines() {
 }
 
 void Game::showWinner() {
-    std::cout << Common::clearScreen 
-              << (player1->playerBoard.unsunkShips.size() == 0 ? player2->getName() : player1->getName()) 
-              << Common::wins << std::endl;
+    std::string winnerName = (player1->playerBoard.unsunkShips.size() == 0 ? player2->getName() : player1->getName());
+    std::cout << Common::clearScreen << winnerName << Common::wins << std::endl;
     for (int i = 0; i < 30; i++) {
         std::cout << " " << std::endl;
         std::this_thread::sleep_for (std::chrono::seconds(1));

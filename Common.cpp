@@ -132,7 +132,9 @@ std::string Common::centerVertically(std::string message, int height) {
     for (auto c : message)
         if (c == '\n')
             lines++;
-    return message + std::string((height / 2) - (lines / 2), '\n');
+    for (int l = 0; l < (height - lines) / 2; l++)
+        message += "\n";
+    return message;
 }
 
 std::string Common::centerFully(std::string message) {
