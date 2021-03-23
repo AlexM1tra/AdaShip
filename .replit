@@ -1,0 +1,2 @@
+language="cpp"
+run="clang++-7 -pthread -std=c++17 -o main AiPlayer.cpp Board.cpp BoardSquare.cpp Boat.cpp Common.cpp Coordinate.cpp Game.cpp HumanPlayer.cpp Player.cpp SettingsIO.cpp main.cpp && ./main"
