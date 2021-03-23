@@ -9,36 +9,17 @@
 
 class BoardSquare {
 public:
+    static BoardSquare* EMPTY();
+    static BoardSquare* BOAT();
+    static BoardSquare* HIT();
+    static BoardSquare* MISS();
+    std::string toString();
+
     bool operator==(const BoardSquare& rhs) {
         return this->_value == rhs._value;
     }
-    std::string toString() {
-        return _value;
-    }
-    static BoardSquare* EMPTY() {
-        if (!_empty)
-            _empty = new BoardSquare("[ ]");
-        return _empty;
-    }
-    static BoardSquare* BOAT() {
-        if (!_boat)
-            _boat = new BoardSquare(std::string("[") + "■" + "]");
-        return _boat;
-    }
-    static BoardSquare* HIT() {
-        if (!_hit)
-            _hit = new BoardSquare("\033[31m[H]\033[0m");
-        return _hit;
-    }
-    static BoardSquare* MISS() {
-        if (!_miss)
-            _miss = new BoardSquare("[M]");
-        return _miss;
-    }
 private:
-    BoardSquare(std::string value) {
-        this->_value = std::move(value);
-    }
+    BoardSquare(std::string value);
     std::string _value;
     static BoardSquare* _empty;
     static BoardSquare* _boat;
