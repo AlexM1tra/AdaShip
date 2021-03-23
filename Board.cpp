@@ -165,8 +165,9 @@ void Board::addMines() {
     while (minesAdded < 5) {
         c =  Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
                         (rand() % SettingsIO::currentDimensions().height) + 1);
-        if (this->getStatusOfSquare(c) == BoardSquare::EMPTY())
+        if (this->getStatusOfSquare(c) == BoardSquare::EMPTY()) {
             this->setStatusOfSquare(c, BoardSquare::MINE());
             minesAdded++;
+        }
     }
 }
