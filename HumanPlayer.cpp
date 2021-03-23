@@ -37,16 +37,15 @@ boatPlacementStart:
                                 && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
                                 && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
                         });
-                if (anchor == "A") {
+                if (anchor == "A")
                   this->autoPlaceShip(&boat);
-                } else if (anchor == "A*") {
+                else if (anchor == "A*") {
                   this->autoPlaceShip(&boat);
                   autoPlaceRemaining = true;
-                } else if (anchor == "R") {
+                } else if (anchor == "R")
                   goto boatPlacementStart;
-                } else {
+                else
                   placeAgain = this->addShip(&boat, anchor);
-                }
             }
         }
     }
@@ -57,7 +56,7 @@ bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
     std::vector<BoatPosition> options = this->getPossibleShipPlacements(boat, Coordinate(anchor));
     std::cout << this->playerBoard.getBoardWithPlacementOptions(options) << "\n\n";
     std::string chosenOption = Common::validatedInput(
-            "\n\nC- Choose new placemen.t\n\nChoose one of the placement options shown above: ",
+            "\n\nC- Choose new placement.\n\nChoose one of the placement options shown above: ",
             [options](std::string input){
                 std::vector<std::string> optionNumbers = std::vector<std::string>{"1", "2", "3", "4"};
                 return std::find(
