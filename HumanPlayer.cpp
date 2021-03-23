@@ -88,14 +88,17 @@ void HumanPlayer::printShipsToPlace(Boat* boat) {
 
 Coordinate* HumanPlayer::move() {
     std::string chosenCoordinate = Common::validatedInput(
-            "Type Q to quit.\nEnter coordinate: ",
+            "A- Auto fire.\nQ- Quit.\n\nEnter coordinate or choose option above: ",
             [](std::string input) {
-                return input == "Q" || (Coordinate::isCoordinate(input)
+                return input == "A" || input == "Q" || (Coordinate::isCoordinate(input)
                     && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
                     && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
             });
-    if (chosenCoordinate == "Q")
-      return nullptr;
+    if (chosenCoordinate == "A")
+        return new Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
+                              (rand() % SettingsIO::currentDimensions().height) + 1);
+    else if (chosenCoordinate == "Q")
+        return nullptr;
     return new Coordinate(chosenCoordinate);
 }
 

@@ -114,11 +114,16 @@ void showMenu() {
     std::cout << "\n\n" << Common::centerHorizontally("Please choose an option:", 54);
     std::cout << "\n" << Common::centerHorizontally("1. Play a game against an AI", 54);
     std::cout << "\n" << Common::centerHorizontally("2. Play a 2 player game", 54);
-    std::cout << "\n" << Common::centerHorizontally("3. Open settings", 54);
-    std::cout << "\n" << Common::centerHorizontally("4. Quit", 54) << "\n\n";
+    std::cout << "\n" << Common::centerHorizontally("3. Play a salvo game against an AI", 54);
+    std::cout << "\n" << Common::centerHorizontally("4. Play a 2 player salvo game", 54);
+    std::cout << "\n" << Common::centerHorizontally("5. Play a game with mines against an AI", 54);
+    std::cout << "\n" << Common::centerHorizontally("6. Play a 2 player game with mines", 54);
+    std::cout << "\n" << Common::centerHorizontally("7. Show an AI game with mines", 54);
+    std::cout << "\n" << Common::centerHorizontally("8. Open settings", 54);
+    std::cout << "\n" << Common::centerHorizontally("9. Quit", 54) << "\n\n";
     std::string chosenOption = Common::validatedInput(
         "",
-        Common::isOneOf(std::vector<std::string>{"1", "2", "3", "4"}),
+        Common::isOneOf(std::vector<std::string>{"1", "2", "3", "4", "5", "6", "7", "8", "9"}),
         "Invalid option. Please choose one of the options shown above: ");
     if (chosenOption == "1") {
       Game game(1);
@@ -127,10 +132,21 @@ void showMenu() {
       Game game(2);
       game.Start();
     } else if (chosenOption == "3") {
+      Game game(1);
+      game.SalvoStart();
+    } else if (chosenOption == "4") {
+      Game game(2);
+      game.SalvoStart();
+    } else if (chosenOption == "5") {
+      
+    } else if (chosenOption == "6") {
+      
+    } else if (chosenOption == "7") {
+      
+    } else if (chosenOption == "8")
       showSettings();
-    } else {
+    else
       break;
-    }
   }
 }
 

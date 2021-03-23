@@ -29,24 +29,65 @@ void Game::Start() {
     Player* passivePlayer;
     Coordinate* chosenSquare;
     Board::TurnResult result;
+    std::string resultAsString;
     while (player1->playerBoard.unsunkShips.size() != 0 && player2->playerBoard.unsunkShips.size() != 0) {
         activePlayer = isPlayer1Turn ? player1 : player2;
         passivePlayer = isPlayer1Turn ? player2 : player1;
         activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
         chosenSquare = activePlayer->move();
         if (chosenSquare == nullptr)
-          break;
+          return;
         result = passivePlayer->playerBoard.attackSquare(*chosenSquare);
         activePlayer->processTurnResult(result, chosenSquare);
         if (result != Board::TurnResult::ALREADY_ATTACKED) {
             isPlayer1Turn = !isPlayer1Turn;
             activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
-            std::string resultAsString = (result == Board::TurnResult::MISS ? "Miss"
+            resultAsString = (result == Board::TurnResult::MISS ? "Miss"
                                         : result == Board::TurnResult::HIT ? "Hit"
                                         : "Hit & Sunk");
-            std::cout << chosenSquare->Name() << ": " << resultAsString << "\nPress any key to continue: ";
+            std::cout << "\n" << chosenSquare->Name() << ": " << resultAsString << "\n\nPress enter to continue: ";
             getline(std::cin, resultAsString); 
         }
+    }
+    if (this->numberOfPlayers == 1) {
+        std::cout << Common::clearScreen << (player2->playerBoard.unsunkShips.size() == 0 ? Common::you_win : Common::you_lose) << std::endl;
+        for (int i = 0; i < 30; i++) {
+            std::cout << " " << std::endl;
+            std::this_thread::sleep_for (std::chrono::seconds(1));
+        }
+    }
+    
+}
+
+void Game::SalvoStart() {
+    Player* activePlayer;
+    Player* passivePlayer;
+    Coordinate* chosenSquare;
+    std::string goResult = "";
+    Board::TurnResult result;
+    while (player1->playerBoard.unsunkShips.size() != 0 && player2->playerBoard.unsunkShips.size() != 0) {
+        activePlayer = isPlayer1Turn ? player1 : player2;
+        passivePlayer = isPlayer1Turn ? player2 : player1;
+        for (int gos = 0; gos < activePlayer->playerBoard.unsunkShips.size();) {
+            activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
+            chosenSquare = activePlayer->move();
+            if (chosenSquare == nullptr)
+              return;
+            result = passivePlayer->playerBoard.attackSquare(*chosenSquare);
+            activePlayer->processTurnResult(result, chosenSquare);
+            if (result != Board::TurnResult::ALREADY_ATTACKED) {
+                gos++;
+                goResult += chosenSquare->Name() + ": " 
+                          + (result == Board::TurnResult::MISS ? "Miss"
+                            : result == Board::TurnResult::HIT ? "Hit"
+                            : "Hit & Sunk") + ", ";
+            }
+        }
+        isPlayer1Turn = !isPlayer1Turn;
+        activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
+        std::cout << "\n" << goResult.substr(0, goResult.size() - 2) << "\n\nPress enter to continue: ";
+        getline(std::cin, goResult);
+        goResult = ""; 
     }
     if (chosenSquare != nullptr) { // Indicates that quit wasn't called and the game ended.
       if (this->numberOfPlayers == 1) {
@@ -57,4 +98,8 @@ void Game::Start() {
           }
       }
     }
+}
+
+void Game::StartWithMines() {
+  
 }

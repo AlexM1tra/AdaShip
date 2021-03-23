@@ -22,6 +22,8 @@ public:
     bool isPlayer1Turn;
     Game(int numberOfPlayers);
     void Start();
+    void SalvoStart();
+    void StartWithMines();
 private:
     void clearSunkShips();
     int numberOfPlayers;
