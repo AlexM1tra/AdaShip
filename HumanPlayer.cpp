@@ -19,18 +19,19 @@ HumanPlayer::HumanPlayer(std::vector<Boat> ships, int playerNumber) : Player(shi
 
 void HumanPlayer::addAllShips() {
     bool autoPlaceRemaining = false;
-    bool resetBoard = true;
-    while (resetBoard) {
-        playerBoard.clear();
-        resetBoard = false;
-        for (Boat& boat : this->playerBoard.boats) {
-            if (autoPlaceRemaining)
-                this->autoPlaceShip(&boat);
-            else {
+boatPlacementStart:
+    playerBoard.clear();
+    for (Boat& boat : this->playerBoard.boats) {
+        if (autoPlaceRemaining)
+            this->autoPlaceShip(&boat);
+        else {
+            bool placeAgain = true;
+            while (placeAgain) {
+                placeAgain = false;
                 this->printShipsToPlace(&boat);
                 std::cout << this->playerBoard.getBoardForOwnerAsString() << "\n\n";
                 std::string anchor = Common::validatedInput(
-                        "A- Autoplace Ship.\nA*- Autoplace all remaining Ships.\nR- Reset board\n\nEnter coordinate or use one of the above options: ",
+                        "A- Autoplace ship.\nA*- Autoplace all remaining ships.\nR- Reset board\n\nEnter coordinate or use one of the above options: ",
                         [](std::string input) {
                             return input == "A" || input == "A*" || input == "R" || (Coordinate::isCoordinate(input)
                                 && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
@@ -42,9 +43,9 @@ void HumanPlayer::addAllShips() {
                   this->autoPlaceShip(&boat);
                   autoPlaceRemaining = true;
                 } else if (anchor == "R") {
-                  resetBoard = true;
+                  goto boatPlacementStart;
                 } else {
-                  this->addShip(&boat, anchor);
+                  placeAgain = this->addShip(&boat, anchor);
                 }
             }
         }
@@ -56,7 +57,7 @@ bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
     std::vector<BoatPosition> options = this->getPossibleShipPlacements(boat, Coordinate(anchor));
     std::cout << this->playerBoard.getBoardWithPlacementOptions(options) << "\n\n";
     std::string chosenOption = Common::validatedInput(
-            "Choose one of the placement options shown above (or C to choose again): ",
+            "\n\nC- Choose new placemen.t\n\nChoose one of the placement options shown above: ",
             [options](std::string input){
                 std::vector<std::string> optionNumbers = std::vector<std::string>{"1", "2", "3", "4"};
                 return std::find(
@@ -67,7 +68,7 @@ bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
             },
             "Invalid option. Please choose one of the options shown above: ");
     if (chosenOption == "C")
-        this->addShip(boat);
+        return true;
     else
         this->playerBoard.addBoat(boat, options[stoi(chosenOption) - 1]);
     return false;
