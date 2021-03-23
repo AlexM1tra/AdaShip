@@ -9,10 +9,8 @@
 
 class HumanPlayer : public Player {
 public:
-    HumanPlayer(std::vector<Boat> ships);
-    HumanPlayer(std::vector<Boat> ships, int playerNumber);
+    HumanPlayer(std::vector<Boat> ships, PlayerType playerType);
     void addAllShips() override;
-    void showTurnUI(std::string) override;
     Coordinate* move() override;
     void processTurnResult(Board::TurnResult result, Coordinate* chosenSquare) override;
 private:
@@ -21,7 +19,6 @@ private:
       **/
     bool addShip(Boat*, std::string anchor);
     void printShipsToPlace(Boat*);
-    int playerNumber = 0;
 };
 
 #endif //ADASHIPPROJECT_HUMANPLAYER_H

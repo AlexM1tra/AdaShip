@@ -4,7 +4,7 @@
 
 #include "Player.h"
 
-Player::Player(std::vector<Boat> ships) : playerBoard(Board(SettingsIO::currentDimensions().width, SettingsIO::currentDimensions().height, ships)) {
+Player::Player(std::vector<Boat> ships, PlayerType playerType) : playerBoard(Board(SettingsIO::currentDimensions().width, SettingsIO::currentDimensions().height, ships)), playerType(playerType) {
     srand(time(NULL));
 }
 
@@ -78,4 +78,24 @@ void Player::autoPlaceShip(Boat* boat) {
         }
         BoatPosition chosenOption = options[rand() % options.size()];
         this->playerBoard.addBoat(boat, chosenOption);
+}
+
+void Player::showTurnUI(std::string opponentBoard) {
+    std::cout << Common::clearScreen;
+    switch (this->playerType) {
+      case AI1:
+        std::cout << Common::ai1;
+        break;
+      case AI2:
+        std::cout << Common::ai2;
+        break;
+      case PLAYER1:
+        std::cout << Common::player1;
+        break;
+      case PLAYER2:
+        std::cout << Common::player2;
+        break;
+    }
+    std::cout << "\n" << Common::centerHorizontally("Attack", SettingsIO::screenWidth) << "\n\n" << opponentBoard;
+    std::cout << "\n" << Common::centerHorizontally("Your Board", SettingsIO::screenWidth) << "\n\n" << this->playerBoard.getBoardForOwnerAsString() << "\n" << std::endl;
 }

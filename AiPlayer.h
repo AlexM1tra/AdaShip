@@ -9,9 +9,8 @@
 
 class AiPlayer : public Player {
 public:
-    AiPlayer(std::vector<Boat> ships);
+    AiPlayer(std::vector<Boat> ships, PlayerType playerType);
     void addAllShips() override;
-    void showTurnUI(std::string) override {};
     Coordinate* move() override;
     void processTurnResult(Board::TurnResult result, Coordinate* chosenSquare) override;
 private:

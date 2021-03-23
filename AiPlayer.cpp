@@ -5,7 +5,7 @@
 #include "AiPlayer.h"
 #include "SettingsIO.h"
 
-AiPlayer::AiPlayer(std::vector<Boat> ships) : Player(ships) {
+AiPlayer::AiPlayer(std::vector<Boat> ships, PlayerType playerType) : Player(ships, playerType) {
     this->addAllShips();
 }
 

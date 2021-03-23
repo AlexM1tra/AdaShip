@@ -22,6 +22,8 @@ struct Common {
     static const std::string you_lose;
     static const std::string settings;
     static const std::string place_boat;
+    static const std::string ai1;
+    static const std::string ai2;
     static const std::string player1;
     static const std::string player2;
     static std::string validatedInput(std::string_view prompt, std::function<bool(std::string)> validator, std::string_view errorMessage = "");

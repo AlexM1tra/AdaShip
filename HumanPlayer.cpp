@@ -6,14 +6,8 @@
 #include <chrono>
 
 #include "HumanPlayer.h"
-#include "Common.h"
 
-HumanPlayer::HumanPlayer(std::vector<Boat> ships) : Player(ships) {
-    this->addAllShips();
-}
-
-HumanPlayer::HumanPlayer(std::vector<Boat> ships, int playerNumber) : Player(ships) {
-    this->playerNumber = playerNumber;
+HumanPlayer::HumanPlayer(std::vector<Boat> ships, PlayerType playerType) : Player(ships, playerType) {
     this->addAllShips();
 }
 
@@ -75,8 +69,7 @@ bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
 
 void HumanPlayer::printShipsToPlace(Boat* boat) {
     std::cout << Common::clearScreen;
-    if (this->playerNumber != 0)
-      std::cout << (this->playerNumber == 1 ? Common::player1 : Common::player2);
+    std::cout << (this->playerType == PLAYER1 ? Common::player1 : Common::player2);
     std::cout << Common::place_boat << "\n\n";
     for (Boat& otherBoat : this->playerBoard.boats) {
       if (&otherBoat == boat) {
@@ -91,14 +84,6 @@ void HumanPlayer::printShipsToPlace(Boat* boat) {
       }
     }
     std::cout << "\n";
-}
-
-void HumanPlayer::showTurnUI(std::string opponentBoard) {
-    std::cout << Common::clearScreen;
-    if (this->playerNumber != 0)
-      std::cout << (this->playerNumber == 1 ? Common::player1 : Common::player2);
-    std::cout << "\n" << Common::centerHorizontally("Attack", SettingsIO::screenWidth) << "\n\n" << opponentBoard;
-    std::cout << "\n" << Common::centerHorizontally("Your Board", SettingsIO::screenWidth) << "\n\n" << this->playerBoard.getBoardForOwnerAsString() << "\n" << std::endl;
 }
 
 Coordinate* HumanPlayer::move() {

@@ -13,14 +13,14 @@ Game::Game(int numberOfPlayers) {
     availableShips = settings.second;
     isPlayer1Turn = true;
     if (numberOfPlayers == 0) {
-        player1 = new AiPlayer(availableShips);
-        player2 = new AiPlayer(availableShips);
+        player1 = new AiPlayer(availableShips, Player::PlayerType::AI1);
+        player2 = new AiPlayer(availableShips, Player::PlayerType::AI2);
     } else if (numberOfPlayers == 1) {
-        player1 = new HumanPlayer(availableShips);
-        player2 = new AiPlayer(availableShips);
+        player1 = new HumanPlayer(availableShips, Player::PlayerType::PLAYER1);
+        player2 = new AiPlayer(availableShips, Player::PlayerType::AI1);
     } else {
-        player1 = new HumanPlayer(availableShips, 1);
-        player2 = new HumanPlayer(availableShips, 2);
+        player1 = new HumanPlayer(availableShips, Player::PlayerType::PLAYER1);
+        player2 = new HumanPlayer(availableShips, Player::PlayerType::PLAYER2);
     }
 }
 
@@ -32,16 +32,21 @@ void Game::Start() {
     while (player1->playerBoard.unsunkShips.size() != 0 && player2->playerBoard.unsunkShips.size() != 0) {
         activePlayer = isPlayer1Turn ? player1 : player2;
         passivePlayer = isPlayer1Turn ? player2 : player1;
-        std::cout << (numberOfPlayers == 2 && activePlayer == player1 
-                          ? Common::player1 : Common::player2) << "\n\n";
         activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
         chosenSquare = activePlayer->move();
         if (chosenSquare == nullptr)
           break;
         result = passivePlayer->playerBoard.attackSquare(*chosenSquare);
         activePlayer->processTurnResult(result, chosenSquare);
-        if (result != Board::TurnResult::ALREADY_ATTACKED)
+        if (result != Board::TurnResult::ALREADY_ATTACKED) {
             isPlayer1Turn = !isPlayer1Turn;
+            activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
+            std::string resultAsString = (result == Board::TurnResult::MISS ? "Miss"
+                                        : result == Board::TurnResult::HIT ? "Hit"
+                                        : "Hit & Sunk");
+            std::cout << chosenSquare->Name() << ": " << resultAsString << "\nPress any key to continue: ";
+            getline(std::cin, resultAsString); 
+        }
     }
     if (chosenSquare != nullptr) { // Indicates that quit wasn't called and the game ended.
       if (this->numberOfPlayers == 1) {
