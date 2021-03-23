@@ -44,7 +44,8 @@ void Game::Start() {
             activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
             resultAsString = (result == Board::TurnResult::MISS ? "Miss"
                                         : result == Board::TurnResult::HIT ? "Hit"
-                                        : "Hit & Sunk");
+                                        : result == Board::TurnResult::HIT_AND_SUNK ? "Hit & Sunk"
+                                        : "Mine");
             std::cout << "\n" << chosenSquare->Name() << ": " << resultAsString << "\n\nPress enter to continue: ";
             getline(std::cin, resultAsString); 
         }
