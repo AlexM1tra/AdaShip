@@ -51,21 +51,6 @@ player) during a game. Every other reference to a boat should be a pointer to on
 While this is a very basic diagram, it illustrates the rough picture of how the fundamental components would work together. In the final 
 solution, things like board squares and the results of players' turns were extracted into their own small components for convenience.
 
-## Approach
-When endeavouring to create such a large solution like this, it is vital to at least partially plan the project's structure. It is good 
-practice and standard in C++ development to split classes into header and source files. The class itself should be located in the header 
-file with forward declarations for all of the methods. Then, in the source file, definitions should be given for each of these methods. 
-This format keeps your code clean and allows somebody to see the structured outline of your classes by just looking at the header files.
-
-Another good practice is to use header guards on your header files. A header guard checks if a unique value isn't defined and if it isn't, 
-it defines it. Your class' code should follow this definition and the header file should end with an endif. The result of this is as 
-follows: whenever the compiler attempts to load the header file, if it has already been loaded, the check on the unique value fails as it 
-has already been defined and none of the code inside the header file is loaded. This prevents redefinitions which can lead to compiler 
-errors.
-
-It's also good to ensure that your code is consistent. This is usually impossible to do perfectly but deciding and clarifying things like 
-what indentation size to use before starting the project can help make the final code much more readable.
-
 ### Epics
 1. Create board and coordinate system which work together.
     - The board should have a grid which can be stored as a matrix or two dimensional vector for ease of use.
@@ -115,6 +100,92 @@ what indentation size to use before starting the project can help make the final
     - Modify the board and game components to allow mines to be added at the beginning of the game and processed throughout the game.
 
 # Development
+## Best Practices
+When endeavouring to create such a large solution like this, it is vital to at least partially plan the project's structure. It is good 
+practice and standard in C++ development to split classes into header and source files. The class itself should be located in the header 
+file with forward declarations for all of the methods. Then, in the source file, definitions should be given for each of these methods. 
+This format keeps your code clean and allows somebody to see the structured outline of your classes by just looking at the header files.
+
+Another good practice is to use header guards on your header files. A header guard checks if a unique value isn't defined and if it isn't, 
+it defines it. Your class' code should follow this definition and the header file should end with an endif. The result of this is as 
+follows: whenever the compiler attempts to load the header file, if it has already been loaded, the check on the unique value fails as it 
+has already been defined and none of the code inside the header file is loaded. This prevents redefinitions which can lead to compiler 
+errors.
+
+It's also good to ensure that your code is consistent. This is usually impossible to do perfectly but deciding and clarifying things like 
+what indentation size to use before starting the project can help make the final code much more readable. Initially, development was done 
+locally. This was faster and more reliable than developing online and allowed me to make use of powerful tools like a debugger in the 
+early stages when it was most vital. I used CLion to create the project. CLion was useful as it formatted my code consistently for me and 
+notified me when I had errors in my code before I compiled it saving me lots of time.
+
+## Phase 1- 02/03/2021
+On the 2nd of March, I created the Board and Coordinate class. As planned, I got these to work together and managed to have a simple board 
+programmatically set up and queried using coordinates created from human readable names. I also created a Boat class and integrated it with 
+the board class so that a fixed number of boats could be statically placed on the grid and shown.
+
+## Phase 1.1- 03/03/2021
+The following day, I created a class for Board squares. This class was designed to be a fixed instance class like a singleton but instead 
+of only one instance being available, there would be one instance per board space type. I designed the class to have 4 private instances 
+to which pointers could be gotten using public methods. The instances represented the 4 states a square on a board could be in: empty, boat, 
+hit and miss. 
+When I first made the class, I wrote the entire class in the header file. As it was only small, I thought that this would suffice until later 
+in the development. There were issues with the instances and the program wasn't compiling. After researching I found out that the static 
+private instances I was using needed to be initialised. I created an accompanying source file and initialised them to null pointers and the 
+program compiled.
+
+Next, I refactored my Board class so that it's 2D vector stored BoardSquare pointers instead of strings and I contained the string 
+representations within the BoardSquare instances themselves. I learned later that this was a good decision as it meant that invalid board 
+square values were impossible because only the 4 instances of BoardSquare could exist on the board.
+
+## Phase 1.2- 05/03/2021
+This phase involved creating the game component, the player component and a rudimentary SettingsIO class. Now that the board was working 
+properly, I decided to create a game component which instantiated two players and played a simple game between them. The player classes had 
+their boards statically set with boats already placed and chose squares to attack entirely randomly. As a result, games took many turns to 
+complete. To make adding a human move method easier later on, I added a boolean value to the player class called isHuman. For human players, 
+this was obviously set to true and it was false otherwise. When implementing the player's behaviour, I could now guard it behind this boolean 
+and whenever the time came to add a human compatible alternative, I could just add an else statement.
+
+When the game component was initialised, it needed to get the current boats and board size from the configuration file but I hadn't written 
+the logic for reading from/writing to a file yet. I decided to implement a dummy function which returned the default board size and ships so 
+that development could continue.
+
+## Phase 1.3- 08/03/2021
+After a few days of adding logic to the board, game and player components so that they could play a real game, it came time to add the human 
+logic to the player class. I had been trying to do this with the aforementioned boolean flag in the days prior but by the 8th, I realised that 
+the best solution would be to make the Player class abstract and have two subclasses: one for HumanPlayer and one for AIPlayer. These two 
+subclasses could then override and implement methods like place boats and move as they need. Logic which would be shared between them could 
+stay in the player class which would save repeating the same code in two separate files.
+
+One thing I learned when creating these subclasses is that C++ has the idea of private inheritance as well as public inheritance. Additionally, 
+in order for a variable of type Class to be instantiated with a type SubClass where SubClass is a subclass of Class, you must use a pointer. 
+While this change had little effect on the overall solution, it did mean that I had to change Game's player1 and player2 attributes to be of 
+type Player*.
+
+By the end of this phase, I was able to play a simple game of Battleships with the computer. I could place my ships using coordinates to choose 
+an anchor point and then I could use numbers to choose from one of the available placement options. Then the game would start and I could input 
+coordinates to attack and they would show up on the board as either hits or misses. Unfortunately, the game wasn't finishing when one of us had 
+completely run out of ships. It took me a few days until I was able to find and fix the problem.
+
+## Phase 2
+The issue was that some of the boats which had been hit and sunk weren't having their remainingSpaces variable reduced as they should. The 
+remainingSpaces variable is a list of spaces that the boat occupies which haven't been hit. When the list is empty, the boat is sunk. After a 
+lot of debugging, I found that when I looked them up in the board's list of boats, their names did not match what they should have been. Some 
+of the boats' names had been cleared. I stepped through the initialisation of the board's boat list and they all had names when the game began 
+but somewhere during the game the names were being erased. Without any other interaction happening with the list in-game, I eventually came to 
+the conclusion that somewhere in the program, a pointer to a boat was being used. The original boat object that was being pointed to must have 
+moved out of scope and the pointer became invalid. I wrote an assertion which periodically checked whether any of the board's boats' names had 
+been cleared. I also added a destructor to the boat class so that I could see when the boat classes were being destroyed. As expected, it was 
+called multiple times at the start of the game (during the initialisation process) but I also saw the destructor being called just before the 
+assertion failed. This confirmed that it was an issue with the pointers and so I refactored the code so that the boats are set for each board 
+once and then kept for the duration of the board's lifespan. All other boats are pointers to those instances and the issue had been resolved.
+
+The solution now worked as a game. I could play a game against the computer, I could play a 2 player game or I could watch 2 AIs play against 
+each other.
+
+## Phase 2.1- 19/03/2021
+The next component I added was called Common. I created this class to hold constants that I may need thoughout the program (like a string to 
+clear the screen) as well as some helper methods which would make creating UIs easier.
+
 a. Adoption and use of ‘good’ standards (linked to 1a, 1b, 1c).
 b. Phase 1 development: tasks, code review and changes (linked to 1d,1e).
 c. ..repeated for each development phase.
