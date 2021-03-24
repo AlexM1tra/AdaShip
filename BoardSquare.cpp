@@ -12,7 +12,7 @@ BoardSquare* BoardSquare::EMPTY() {
 
 BoardSquare* BoardSquare::BOAT() {
     if (!_boat)
-        _boat = new BoardSquare(std::string("[") + "■" + "]");
+        _boat = new BoardSquare("[■]");
     return _boat;
 }
 

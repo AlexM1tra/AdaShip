@@ -29,7 +29,6 @@ std::string Player::getName() {
 
 Player::Player(std::vector<Boat> ships, PlayerType playerType) : playerBoard(Board(SettingsIO::currentDimensions().width, SettingsIO::currentDimensions().height, ships)),
                                                                  _playerType(playerType) {
-    srand(time(NULL));
 }
 
 std::vector<BoatPosition> Player::_getPossibleShipPlacements(Boat *boat, Coordinate startingPoint) {
