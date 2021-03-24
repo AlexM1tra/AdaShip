@@ -29,10 +29,10 @@ specification states that an excellent solution should support multiple game typ
 component could house and differentiate the logic between these game variations.
 
 ### Context (aside):
-The salvo game is a modification of the original game where each player can take N shots where N is the number of unsunk ships the 
-player has left.
-The mine game is more similar to the original game but adds 5 mines to the board which when struck, attack all adjacent squares 
-including recursively attacking neighbouring mines.
+- The salvo game is a modification of the original game where each player can take N shots where N is the number of unsunk ships the 
+  player has left.
+- The mine game is more similar to the original game but adds 5 mines to the board which when struck, attack all adjacent squares 
+  including recursively attacking neighbouring mines.
 
 With one of the project requirements being a need to read configuration settings from an external file called 'adaship_config.ini', it 
 would be sensible to enclose this logic in its own component thus relieving any other component from bearing the burden of reading and 
