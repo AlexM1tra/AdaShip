@@ -5,15 +5,15 @@
 #ifndef ADASHIPPROJECT_BOARD_H
 #define ADASHIPPROJECT_BOARD_H
 
-#include <vector>
 #include <unordered_map>
-#include "Coordinate.h"
+
 #include "BoardSquare.h"
 #include "Boat.h"
+#include "BoatPosition.h"
+#include "Coordinate.h"
 #include "SettingsIO.h"
 
 namespace std {
-
     template <>
     struct hash<Coordinate>
     {
@@ -37,20 +37,21 @@ public:
     std::string getBoardForOwnerAsString();
     std::string getBoardForOpponentAsString();
     std::string getBoardWithPlacementOptions(std::vector<BoatPosition>);
-    BoardSquare* getStatusOfSquare(Coordinate);
     void addBoat(Boat*, BoatPosition);
     TurnResult attackSquare(Coordinate&);
     Boat* getBoatAtCoordinate(Coordinate*);
+    BoardSquare* getStatusOfSquare(Coordinate);
     void clear();
+    void addMines();
     std::vector<Boat> boats;
     std::vector<Boat*> unsunkShips;
-    void addMines();
 private:
-    int width, height;
-    std::vector<std::vector<BoardSquare*>> boardMatrix;
-    std::unordered_map<Coordinate, Boat*> coordinateToBoat;
-    void setStatusOfSquare(Coordinate, BoardSquare*);
-    void fillBoatSquares(std::vector<Coordinate>, Boat*);
+    std::string _getBoardForPlayer(bool isOwner);
+    void _setStatusOfSquare(Coordinate, BoardSquare*);
+    void _fillBoatSquares(std::vector<Coordinate>, Boat*);
+    int _width, _height;
+    std::vector<std::vector<BoardSquare*>> _boardMatrix;
+    std::unordered_map<Coordinate, Boat*> _coordinateToBoat;
 };
 
 #endif //ADASHIPPROJECT_BOARD_H

@@ -14,26 +14,25 @@ struct BoardDimensions {
     int height;
     BoardDimensions(int width, int height) : width(width), height(height) {}
     std::string toString() {
-      return std::to_string(width) + "x" + std::to_string(height);
+        return std::to_string(width) + "x" + std::to_string(height);
     }
 };
 
 class SettingsIO {
 public:
     static BoardDimensions currentDimensions();
-    static std::pair<BoardDimensions, std::vector<Boat>> getSettings();
-    static BoardDimensions readBoardDimensions(std::string dimensions);
+    static std::vector<Boat> initialiseSettings();
     static void updateBoardDimensions(BoardDimensions dimensions);
     static void addBoat(Boat boat);
     static void removeBoat(Boat boat);
 
     static int screenWidth;
     static int screenHeight;
-
 private:
-    static std::vector<std::string> readSettingsFile();
-    static void writeToSettingsFile(std::vector<std::string> lines);
-    static BoardDimensions boardDimensions;
+    static BoardDimensions _readBoardDimensions(std::string dimensions);
+    static std::vector<std::string> _readSettingsFile();
+    static void _writeToSettingsFile(std::vector<std::string> lines);
+    static BoardDimensions _boardDimensions;
 };
 
 #endif //ADASHIPPROJECT_SETTINGSIO_H

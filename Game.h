@@ -5,8 +5,8 @@
 #ifndef ADASHIPPROJECT_GAME_H
 #define ADASHIPPROJECT_GAME_H
 
-#include <stdlib.h>
-#include <time.h>
+#include <thread>
+#include <chrono>
 
 #include "Player.h"
 #include "SettingsIO.h"
@@ -16,18 +16,14 @@
 
 class Game {
 public:
-    Player * player1;
-    Player * player2;
-    std::vector<Boat> availableShips;
-    bool isPlayer1Turn;
     Game(int numberOfPlayers);
-    void Start();
-    void SalvoStart();
-    void StartWithMines();
+    void start();
+    void salvoStart();
+    void startWithMines();
 private:
-    std::vector<Coordinate> getMinesFor(Player* player);
-    void showWinner();
-    int numberOfPlayers;
+    void _showWinner();
+    Player* _player1;
+    Player* _player2;
 };
 
 #endif //ADASHIPPROJECT_GAME_H

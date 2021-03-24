@@ -3,7 +3,6 @@
 //
 
 #include "AiPlayer.h"
-#include "SettingsIO.h"
 
 AiPlayer::AiPlayer(std::vector<Boat> ships, PlayerType playerType) : Player(ships, playerType) {
     this->addAllShips();
@@ -12,14 +11,14 @@ AiPlayer::AiPlayer(std::vector<Boat> ships, PlayerType playerType) : Player(ship
 void AiPlayer::addAllShips() {
     std::vector<BoatPosition> options;
     for (Boat& boat : this->playerBoard.boats) {
-      this->autoPlaceShip(&boat);
+        this->_autoPlaceShip(&boat);
     }
 }
 
 Coordinate* AiPlayer::move() {
-    if (squareCache.size() != 0) {
-        Coordinate* square = new Coordinate(squareCache[squareCache.size() - 1]);
-        squareCache.pop_back();
+    if (_squareCache.size() != 0) {
+        Coordinate* square = new Coordinate(_squareCache[_squareCache.size() - 1]);
+        _squareCache.pop_back();
         return square;
     }
     return new Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
@@ -29,18 +28,18 @@ Coordinate* AiPlayer::move() {
 void AiPlayer::processTurnResult(Board::TurnResult result, Coordinate* chosenSquare) {
     if (result == Board::TurnResult::HIT) {
         if (!(chosenSquare->Column() == 1)) {
-            squareCache.push_back(Coordinate(chosenSquare->Column() - 1, chosenSquare->Row()));
+            _squareCache.push_back(Coordinate(chosenSquare->Column() - 1, chosenSquare->Row()));
         }
         if (!(chosenSquare->Row() == 1)) {
-            squareCache.push_back(Coordinate(chosenSquare->Column(), chosenSquare->Row() - 1));
+            _squareCache.push_back(Coordinate(chosenSquare->Column(), chosenSquare->Row() - 1));
         }
         if (!(chosenSquare->Column() == SettingsIO::currentDimensions().width)) {
-            squareCache.push_back(Coordinate(chosenSquare->Column() + 1, chosenSquare->Row()));
+            _squareCache.push_back(Coordinate(chosenSquare->Column() + 1, chosenSquare->Row()));
         }
         if (!(chosenSquare->Row() == SettingsIO::currentDimensions().height)) {
-            squareCache.push_back(Coordinate(chosenSquare->Column(), chosenSquare->Row() + 1));
+            _squareCache.push_back(Coordinate(chosenSquare->Column(), chosenSquare->Row() + 1));
         }
     } else if (result == Board::TurnResult::HIT_AND_SUNK) {
-        squareCache.clear();
+        _squareCache.clear();
     }
 }

@@ -20,7 +20,7 @@ public:
         return this->_value == rhs._value;
     }
 private:
-    BoardSquare(std::string value);
+    explicit BoardSquare(std::string value);
     std::string _value;
     static BoardSquare* _empty;
     static BoardSquare* _boat;

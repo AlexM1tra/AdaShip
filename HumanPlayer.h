@@ -17,8 +17,8 @@ private:
     /** Adds a ship to a board if the user is happy and returns a boolean indicating
       * whether the ship should be replaced elsewhere.
       **/
-    bool addShip(Boat*, std::string anchor);
-    void printShipsToPlace(Boat*);
+    bool _addShip(Boat*, std::string anchor);
+    void _printShipsToPlace(Boat*);
 };
 
 #endif //ADASHIPPROJECT_HUMANPLAYER_H

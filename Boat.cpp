@@ -4,12 +4,14 @@
 
 #include "Boat.h"
 
-#include <iostream>
-
 Boat::Boat(std::string_view name, int length) {
     this->_name = name;
     this->_length = length;
     this->spacesNotHit = std::vector<Coordinate>();
+}
+
+bool Boat::isSunk() const {
+    return this->spacesNotHit.empty();
 }
 
 int Boat::Length() const {
@@ -18,8 +20,4 @@ int Boat::Length() const {
 
 std::string Boat::Name() const {
     return this->_name;
-}
-
-bool Boat::isSunk() {
-    return this->spacesNotHit.size() == 0;
 }

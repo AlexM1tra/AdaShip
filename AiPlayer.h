@@ -14,7 +14,7 @@ public:
     Coordinate* move() override;
     void processTurnResult(Board::TurnResult result, Coordinate* chosenSquare) override;
 private:
-    std::vector<Coordinate> squareCache = std::vector<Coordinate>();
+    std::vector<Coordinate> _squareCache = std::vector<Coordinate>();
 };
 
 #endif //ADASHIPPROJECT_AIPLAYER_H

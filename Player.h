@@ -15,7 +15,6 @@
 
 class Player {
 public:
-    Board playerBoard;
     enum PlayerType {
         AI1 = 0,
         AI2 = 1,
@@ -25,15 +24,16 @@ public:
     virtual void addAllShips() = 0;
     virtual Coordinate* move() = 0;
     virtual void processTurnResult(Board::TurnResult result, Coordinate* chosenSquare) = 0;
-    Player(Player&&) = delete;
-    Player(Player const&) = delete;
     void showTurnUI(std::string);
     std::string getName();
+    Player(Player&&) = delete;
+    Player(Player const&) = delete;
+    Board playerBoard;
 protected:
     Player(std::vector<Boat> ships, PlayerType playerType);
-    std::vector<BoatPosition> getPossibleShipPlacements(Boat* boat, Coordinate startingPoint);
-    void autoPlaceShip(Boat* boat);
-    PlayerType playerType;
+    std::vector<BoatPosition> _getPossibleShipPlacements(Boat* boat, Coordinate startingPoint);
+    void _autoPlaceShip(Boat* boat);
+    PlayerType _playerType;
 };
 
 #endif //ADASHIPPROJECT_PLAYER_H

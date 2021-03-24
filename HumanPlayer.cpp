@@ -13,53 +13,97 @@ HumanPlayer::HumanPlayer(std::vector<Boat> ships, PlayerType playerType) : Playe
 
 void HumanPlayer::addAllShips() {
     bool autoPlaceRemaining = false;
-boatPlacementStart:
+    boatPlacementStart:
     playerBoard.clear();
     for (Boat& boat : this->playerBoard.boats) {
         if (autoPlaceRemaining)
-            this->autoPlaceShip(&boat);
+            this->_autoPlaceShip(&boat);
         else {
             bool placeAgain = true;
             while (placeAgain) {
                 placeAgain = false;
-                this->printShipsToPlace(&boat);
+                this->_printShipsToPlace(&boat);
                 std::cout << this->playerBoard.getBoardForOwnerAsString() << "\n\n";
                 std::string anchor = Common::validatedInput(
                         "A- Autoplace ship.\nA*- Autoplace all remaining ships.\nR- Reset board\n\nEnter coordinate or use one of the above options: ",
                         [](std::string input) {
                             return input == "A" || input == "A*" || input == "R" || (Coordinate::isCoordinate(input)
-                                && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
-                                && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
-                        }, 
+                                                                                     && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
+                                                                                     && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
+                        },
                         "Enter coordinate or use one of the above options: ",
                         true);
                 if (anchor == "A")
-                  this->autoPlaceShip(&boat);
+                    this->_autoPlaceShip(&boat);
                 else if (anchor == "A*") {
-                  this->autoPlaceShip(&boat);
-                  autoPlaceRemaining = true;
+                    this->_autoPlaceShip(&boat);
+                    autoPlaceRemaining = true;
                 } else if (anchor == "R")
-                  goto boatPlacementStart;
+                    goto boatPlacementStart;
                 else
-                  placeAgain = this->addShip(&boat, anchor);
+                    placeAgain = this->_addShip(&boat, anchor);
             }
         }
     }
-    this->printShipsToPlace(&(this->playerBoard.boats[this->playerBoard.boats.size() - 1]));
+    this->_printShipsToPlace(&(this->playerBoard.boats[this->playerBoard.boats.size() - 1]));
     std::cout << this->playerBoard.getBoardForOwnerAsString() << "\n\n\n\n\n\n";
     std::string happy = Common::validatedInput("Are you happy with the ship placements(Y/N)? ",
-                                              Common::isOneOf(std::vector<std::string>{"Y", "N"}),
-                                              " ",
-                                              true);
+                                               Common::isOneOf(std::vector<std::string>{"Y", "N"}),
+                                               " ",
+                                               true);
     if (happy == "N") {
-      autoPlaceRemaining = false;
-      goto boatPlacementStart;
+        autoPlaceRemaining = false;
+        goto boatPlacementStart;
     }
 }
 
-bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
-    this->printShipsToPlace(boat);
-    std::vector<BoatPosition> options = this->getPossibleShipPlacements(boat, Coordinate(anchor));
+Coordinate* HumanPlayer::move() {
+    std::string chosenCoordinate = Common::validatedInput(
+            "A- Auto fire.\nQ- Quit.\n\nEnter coordinate or choose option above: ",
+            [](std::string input) {
+                return input == "A" || input == "Q" || (Coordinate::isCoordinate(input)
+                                                        && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
+                                                        && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
+            },
+            "Enter coordinate or choose option above: ",
+            true);
+    if (chosenCoordinate == "A")
+        return new Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
+                              (rand() % SettingsIO::currentDimensions().height) + 1);
+    else if (chosenCoordinate == "Q")
+        return nullptr;
+    return new Coordinate(chosenCoordinate);
+}
+
+void HumanPlayer::processTurnResult(Board::TurnResult result, Coordinate *chosenSquare) {
+    switch (result) {
+        case Board::TurnResult::MISS:
+            std::cout << Common::clearScreen() << Common::centerVertically(Common::miss(), SettingsIO::screenHeight) << std::endl;
+            std::this_thread::sleep_for (std::chrono::seconds(2));
+            break;
+        case Board::TurnResult::HIT:
+            std::cout << Common::clearScreen() << Common::centerVertically(Common::hit(), SettingsIO::screenHeight) << std::endl;
+            std::this_thread::sleep_for (std::chrono::seconds(2));
+            break;
+        case Board::TurnResult::HIT_AND_SUNK:
+            std::cout << Common::clearScreen() << Common::centerVertically(Common::hit_and_sunk(), SettingsIO::screenHeight) << std::endl;
+            std::this_thread::sleep_for (std::chrono::seconds(2));
+            break;
+        case Board::TurnResult::MINE:
+            std::cout << Common::clearScreen() << Common::centerVertically(Common::mine(), SettingsIO::screenHeight) << std::endl;
+            std::this_thread::sleep_for (std::chrono::seconds(2));
+            break;
+        case Board::TurnResult::ALREADY_ATTACKED:
+            std::cout << Common::clearScreen() << Common::centerVertically("You've already attacked that square!!\nTry again...", SettingsIO::screenHeight) << std::endl;
+            std::this_thread::sleep_for (std::chrono::seconds(2));
+    }
+}
+
+// Private methods.
+
+bool HumanPlayer::_addShip(Boat* boat, std::string anchor) {
+    this->_printShipsToPlace(boat);
+    std::vector<BoatPosition> options = this->_getPossibleShipPlacements(boat, Coordinate(anchor));
     std::cout << this->playerBoard.getBoardWithPlacementOptions(options) << "\n\n";
     std::string chosenOption = Common::validatedInput(
             "\n\nC- Choose new placement.\n\nChoose one of the placement options shown above: ",
@@ -80,62 +124,20 @@ bool HumanPlayer::addShip(Boat* boat, std::string anchor) {
     return false;
 }
 
-void HumanPlayer::printShipsToPlace(Boat* boat) {
-    std::cout << Common::clearScreen << this->getName();
-    std::cout << Common::place_boat << "\n\n";
+void HumanPlayer::_printShipsToPlace(Boat* boat) {
+    std::cout << Common::clearScreen() << this->getName();
+    std::cout << Common::place_boat() << "\n\n";
     for (Boat& otherBoat : this->playerBoard.boats) {
-      if (&otherBoat == boat) {
-        for (int i = 0; i < otherBoat.Length(); i++)
-          std::cout << "■ ";
-        std::cout << ": " << otherBoat.Name() << " <<" << std::endl;
-      }
-      else {
-        for (int i = 0; i < otherBoat.Length(); i++)
-          std::cout << "■ ";
-        std::cout << ": " << otherBoat.Name() << std::endl;
-      }
+        if (&otherBoat == boat) {
+            for (int i = 0; i < otherBoat.Length(); i++)
+                std::cout << "■ ";
+            std::cout << ": " << otherBoat.Name() << " <<" << std::endl;
+        }
+        else {
+            for (int i = 0; i < otherBoat.Length(); i++)
+                std::cout << "■ ";
+            std::cout << ": " << otherBoat.Name() << std::endl;
+        }
     }
     std::cout << "\n";
-}
-
-Coordinate* HumanPlayer::move() {
-    std::string chosenCoordinate = Common::validatedInput(
-            "A- Auto fire.\nQ- Quit.\n\nEnter coordinate or choose option above: ",
-            [](std::string input) {
-                return input == "A" || input == "Q" || (Coordinate::isCoordinate(input)
-                    && Coordinate(input).Row() <= SettingsIO::currentDimensions().height
-                    && Coordinate(input).Column() <= SettingsIO::currentDimensions().width);
-            }, 
-            "Enter coordinate or choose option above: ",
-            true);
-    if (chosenCoordinate == "A")
-        return new Coordinate((rand() % SettingsIO::currentDimensions().width) + 1,
-                              (rand() % SettingsIO::currentDimensions().height) + 1);
-    else if (chosenCoordinate == "Q")
-        return nullptr;
-    return new Coordinate(chosenCoordinate);
-}
-
-void HumanPlayer::processTurnResult(Board::TurnResult result, Coordinate *chosenSquare) {
-    switch (result) {
-        case Board::TurnResult::MISS:
-            std::cout << Common::clearScreen << Common::centerVertically(Common::miss, SettingsIO::screenHeight) << std::endl;
-            std::this_thread::sleep_for (std::chrono::seconds(2));
-            break;
-        case Board::TurnResult::HIT:
-            std::cout << Common::clearScreen << Common::centerVertically(Common::hit, SettingsIO::screenHeight) << std::endl;
-            std::this_thread::sleep_for (std::chrono::seconds(2));
-            break;
-        case Board::TurnResult::HIT_AND_SUNK:
-            std::cout << Common::clearScreen << Common::centerVertically(Common::hit_and_sunk, SettingsIO::screenHeight) << std::endl;
-            std::this_thread::sleep_for (std::chrono::seconds(2));
-            break;
-        case Board::TurnResult::MINE:
-            std::cout << Common::clearScreen << Common::centerVertically(Common::mine, SettingsIO::screenHeight) << std::endl;
-            std::this_thread::sleep_for (std::chrono::seconds(2));
-            break;
-        case Board::TurnResult::ALREADY_ATTACKED:
-            std::cout << Common::clearScreen << Common::centerVertically("You've already attacked that square!!\nTry again...", SettingsIO::screenHeight) << std::endl;
-            std::this_thread::sleep_for (std::chrono::seconds(2));
-    }
 }
