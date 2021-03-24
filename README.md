@@ -223,9 +223,110 @@ statement had been changed from one line to two lines but the curly braces had n
 they were still being counted as added which had led to occasional missing mines.
 
 # Evaluation
-a. Analysis with embedded examples of key code refactoring, reuse, smells.
-b. Implementation and effective use of ‘advanced’ programming principles (with examples).
-c. Features showcase and embedded innovations (with examples) - opportunity to ‘highlight’ best bits.
-d. Improved targeting algorithm – research, design, implementation and tested confirmation (with
-examples).
-e. Reflective review, opportunities to improve and continued professional development.
+During the refactoring process I managed to clean up the code a drastically reduce the number of lines. One example of how I reduced repetitive code 
+is the code for getBoardForOwnerAsString() and getBoardForOpponentAsString() in the Board class. Originally, there were two methods like this:
+
+    std::string Board::getBoardForOwnerAsString() {
+        std::string returnString = "  ";
+        std::string currentColumn;
+        for (int c = 1; c <= this->_width; c++) {
+            currentColumn = Coordinate::getColumnFromNumber(c);
+            returnString += " " + currentColumn + (currentColumn.size() == 2 ? "" : " ");
+        }
+        returnString += "\n";
+        for (int row = 0; row < this->_height; row++) {
+            returnString +=  std::to_string(row + 1) + (row <= 8 ? " " :  "");
+            for (BoardSquare*& item : this->_boardMatrix[row]) {
+                returnString += BoardSquare::EMPTY()->toString();
+            }
+            returnString += "\n";
+        }
+        return returnString;
+    }
+
+    std::string Board::getBoardForOpponentAsString() {
+        std::string returnString = "  ";
+        std::string currentColumn;
+        for (int c = 1; c <= this->_width; c++) {
+            currentColumn = Coordinate::getColumnFromNumber(c);
+            returnString += " " + currentColumn + (currentColumn.size() == 2 ? "" : " ");
+        }
+        returnString += "\n";
+        for (int row = 0; row < this->_height; row++) {
+            returnString +=  std::to_string(row + 1) + (row <= 8 ? " " :  "");
+            for (BoardSquare*& item : this->_boardMatrix[row]) {
+                if (item != BoardSquare::BOAT())
+                    returnString += item->toString();
+                else
+                    returnString += BoardSquare::EMPTY()->toString();
+            }
+            returnString += "\n";
+        }
+        return returnString;
+    }
+
+I noticed that these methods were essentially doing the same thing apart from the if condition in the middle and so I refactored them and extracted 
+a helper method. Now the code looks like this: 
+
+    std::string Board::getBoardForOwnerAsString() {
+        return _getBoardForPlayer(/* isOwner= */ true);
+    }
+
+    std::string Board::getBoardForOpponentAsString() {
+        return _getBoardForPlayer(/* isOwner= */ false);
+    }
+
+    std::string Board::_getBoardForPlayer(bool isOwner) {
+        std::string returnString = "  ";
+        std::string currentColumn;
+        for (int c = 1; c <= this->_width; c++) {
+            currentColumn = Coordinate::getColumnFromNumber(c);
+            returnString += " " + currentColumn + (currentColumn.size() == 2 ? "" : " ");
+        }
+        returnString += "\n";
+        for (int row = 0; row < this->_height; row++) {
+            returnString +=  std::to_string(row + 1) + (row <= 8 ? " " :  "");
+            for (BoardSquare*& item : this->_boardMatrix[row]) {
+                if (item != BoardSquare::BOAT() || isOwner)
+                    returnString += item->toString();
+                else
+                    returnString += BoardSquare::EMPTY()->toString();
+            }
+            returnString += "\n";
+        }
+        return returnString;
+    }
+
+Not only does this make the code easier to read but it also means that in the future if this logic needs to be changed, it can be changed in one 
+place and there is no risk of the two methods diverging.
+
+Something that is generally considered bad practice is using gotos. This is because they can be easily and are often misused and can lead to what's 
+called spaghetti code. In my HumanPlayer ship placement code I had to use a goto so that I could exit both an embedded loop as well as the enclosing 
+loop. This was the most straightforward way to achieve the desired behaviour and while there may be a way to do the same thing without the goto, it 
+is a valid use case for a goto.
+
+My solution showcases inheritance of abstract classes with method overriding, the BoardSquare class with a fixed number of instances as well as a 
+friendly and intuitive UI. Two methods I added to the Common class are centerHorizontally and centerVertically. These methods take a piece of text 
+and center it width a column width or row height respectively. This was used in particular with the menus and turn results to center align text. 
+Though it's a small change, having center aligned text helps make the game feel less like a console application.
+
+For the improved targeting system, I wanted to design something effective yet still simple. I thought about how a human plays the game Battleships. 
+Humans guess randomly until they get a hit and then change their behaviour. They search adjacent squares to gauge which direction the ship is facing. 
+They then systematically attack the squares in the correct direction until the ship is sunk and then they repeat. I added a cache of squares to search 
+called squareCache to AiPlayer. When AiPlayer gets a hit, it adds the adjacent squares to the cache. When it is asked to move, if the cache has squares 
+in it, it pops a square from the cache and attacks there. If it is a hit again, that square's adjacent squares get added and the process continues. Once 
+the AiPlayer is told that the ship is sunk, the squareCache is cleared so that the targeting system doesn't just target the neighbouring squares around 
+the sunk ship. When there are no squares in the squareCache, the targeting system gueses randomly. When I switched from random to this targeting system 
+on blind games, the computer was much closer to beating me in games. When starting a game with 2 AiPlayers using the new targeting system, the game would 
+finish in significantly fewer moves when compared to the random algorithm.
+
+I think my final solution is a robust, complete product which could be used by any new user without any confusion. It functions like a real game of 
+battleships and provides all the features and game modes requested in the specification. Thanks to its built-in input validation, it stands up to erroneous 
+data and can handle and recover from mistakes. 
+
+With more time, I might include a setup screen which ensures that the console is big enough to support the board size. Larger board sizes struggle to fit 
+on smaller screens and if the console isn't at least W * 3 + 2 characters wide where W is the width of the board then the game is practically unplayable. 
+It would also be nice to implement some sort of checking on the number of ships you can add to make sure that the number of spaces the ships require does 
+not exceed the number of spaces available on the board. For example, having 6 ships of length 5 on a board of 5x5 would not work and having a ship of length 
+11 on a 10x10 board could not be placed. I didn't have time to add this validation in but it would be quite simple to add to the method which updates the boat 
+list and board dimensions to do a check on the other and compare sizes.
