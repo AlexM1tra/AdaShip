@@ -184,16 +184,45 @@ each other.
 
 ## Phase 2.1- 19/03/2021
 The next component I added was called Common. I created this class to hold constants that I may need thoughout the program (like a string to 
-clear the screen) as well as some helper methods which would make creating UIs easier.
+clear the screen) as well as some helper methods which would make creating UIs easier. To handle UI input, I created a function called 
+validatedInput. This function took a string prompt, a lambda validator and a string error message. It would print the prompt and get user input 
+using getline(). While the input failed the validator function, it would print the error message and ask for the input again. This was possibly 
+the most useful function of the whole project as it meant that any time I needed to get user input, I could just call this function and write a 
+short validator which could be customised to each use case.
 
-a. Adoption and use of ‘good’ standards (linked to 1a, 1b, 1c).
-b. Phase 1 development: tasks, code review and changes (linked to 1d,1e).
-c. ..repeated for each development phase.
-d. Phase n development: tasks, code review and changes (linked to 1d,1e).
-e. Ensuring quality through testing and resolving bugs (linked to 1a, 1b, 2a, 2b..2c).
-f. Reflection on key design challenges, innovations and how I solved them (with examples).
+Later on, I also added the isOneOf helper method. This returns a validator to be used with the validatedInput method. isOneOf takes a vector of 
+options and checks whether the input is contained within the vector. This was indispensable when designing and creating the menus as each time 
+I needed to check whether the user's input was one of the numerical options, I could simply create a vector with the options, pass it to isOneOf, 
+and pass the return value to validatedInput.
 
-# Evaluation (academic standard: distinction level detail: section required for distinction)
+## Phase 3- 22/03/2021 onwards
+Moved to online development using the Repl.it platform with GitHub. During the course of the development, I had added many static enums and 
+classes to other classes. This is generally bad practice and so during phase 3, I worked to refactor much of the code. Classes like BoatPosition 
+which was originally part of Boat, got moved into its own header/source file.
+
+I also spent time ensuring that the solution met the requirements for pass, merit and distinction levels. I added the features necessary to comply 
+with the pass grade, moved onto merit and then realised that I hadn't implemented the extra features required for distinction: the salvo and mine 
+games. I copied the Game class' start method and modified the turn logic by adding a for loop which iterated through the current player's remaining 
+ships. This yielded the desired behaviour with minimal changes to the wider solution so I added the corresponding options to the menu and moved on 
+to the mine game. At first, I thought about storing the mines for each player within the game class itself as I didn't want to modify the Board 
+class as by extension, I'd also have to modify the BoardSquare class and then update the switches throughout the project that use BoardSquare. I 
+copied the start method in game much like I did with the salvo game but evetually realised that the easiest way would be to add the extra board 
+square. I realised that I could add the mines at the beginning of the mineStart method (as all boat placement happens when the game class is 
+initialised) and then call the original start method. This shortened the code within the game component significantly and made the final solution 
+much cleaner.
+
+I then proceeded to continue with code cleanup and refactoring and did some final testing to ensure there weren't any bugs. After trying the 
+different game modes I found 3 bugs remaining in the system. 
+The first was that if the user didn't use capital letters when specifying a coordinate or option (like Q to quit), the system would break. This 
+led me to implement an optional bool parameter in my validatedInput method called autoCapitalise. When set to true, the input is automatically 
+capitalised to avoid any issues. 
+The second bug was that the user wasn't being given an opportunity to review their ship placements before starting the game. This was a requirement 
+in the specification and so I added a small speedbump which checks that the user is happy with their ship positions. 
+The final bug was that in the mine game, sometimes less than 5 mines were being added to the board. I found that this was happening because an if 
+statement had been changed from one line to two lines but the curly braces had not been added. As a result, even when mines weren't being added, 
+they were still being counted as added which had led to occasional missing mines.
+
+# Evaluation
 a. Analysis with embedded examples of key code refactoring, reuse, smells.
 b. Implementation and effective use of ‘advanced’ programming principles (with examples).
 c. Features showcase and embedded innovations (with examples) - opportunity to ‘highlight’ best bits.
