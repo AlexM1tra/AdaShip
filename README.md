@@ -310,6 +310,10 @@ friendly and intuitive UI. Two methods I added to the Common class are centerHor
 and center it width a column width or row height respectively. This was used in particular with the menus and turn results to center align text. 
 Though it's a small change, having center aligned text helps make the game feel less like a console application.
 
+Although I would've liked to add automated unit tests, I didn't have time to write these. They would've ensured that any added logic did not break 
+the game and they would've helped me debug issues quicker. Instead, I carried out manual testing by hand and also had other people use the program 
+to make sure that the interface was easily navigable.
+
 For the improved targeting system, I wanted to design something effective yet still simple. I thought about how a human plays the game Battleships. 
 Humans guess randomly until they get a hit and then change their behaviour. They search adjacent squares to gauge which direction the ship is facing. 
 They then systematically attack the squares in the correct direction until the ship is sunk and then they repeat. I added a cache of squares to search 

@@ -60,6 +60,8 @@ void Game::salvoStart() {
         activePlayer = is_player1Turn ? _player1 : _player2;
         passivePlayer = is_player1Turn ? _player2 : _player1;
         for (int gos = 0; gos < activePlayer->playerBoard.unsunkShips.size();) {
+            if (_player1->playerBoard.unsunkShips.size() == 0 || _player2->playerBoard.unsunkShips.size() == 0)
+                break;
             activePlayer->showTurnUI(passivePlayer->playerBoard.getBoardForOwnerAsString());
             chosenSquare = activePlayer->move();
             if (chosenSquare == nullptr)
@@ -92,7 +94,7 @@ void Game::startWithMines() {
 void Game::_showWinner() {
     std::string winnerName = (_player1->playerBoard.unsunkShips.size() == 0 ? _player2->getName() : _player1->getName());
     std::cout << Common::clearScreen() << winnerName << Common::wins() << std::endl;
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 20; i++) {
         std::cout << " " << std::endl;
         std::this_thread::sleep_for (std::chrono::seconds(1));
     }
